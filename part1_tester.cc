@@ -86,8 +86,8 @@ int test_create_and_getattr()
                 return 3;
             }
         }
-    } 
-    total_score += 40; 
+    }
+    total_score += 40;
     printf("========== pass test create and getattr ==========\n");
     return 0;
 }
@@ -130,8 +130,8 @@ int test_indirect()
                 return 2;
             }
             if (buf.compare(content[i]) != 0) {
-                std::cout << "error get large file, not consistent with put large file : " << 
-                    buf << " <-> " << content[i] << "\n";
+                std::cout << "error get large file, not consistent with put large file : " <<
+                          buf << " <-> " << content[i] << "\n";
                 return 3;
             }
         }
@@ -195,12 +195,12 @@ int test_put_and_get()
             sprintf(temp, "%d", contents[i]);
             std::string buf2(temp);
             if (buf.compare(buf2) != 0) {
-                std::cout << "[TEST_ERROR] : error get, not consistent with put " << 
-                    buf << " <-> " << buf2 << "\n\n";
+                std::cout << "[TEST_ERROR] : error get, not consistent with put " <<
+                          buf << " <-> " << buf2 << "\n\n";
                 return 5;
             }
         }
-    } 
+    }
 
     total_score += 30;
     printf("========== pass test put and get ==========\n");
@@ -212,7 +212,7 @@ int test_remove()
     int i;
     extent_protocol::extentid_t id;
     extent_protocol::attr a;
-    
+
     printf("========== begin test remove ==========\n");
     for (i = 0; i < FILE_NUM; i++) {
         memset(&a, 0, sizeof(a));
@@ -227,7 +227,7 @@ int test_remove()
             return 2;
         }
     }
-    total_score += 20; 
+    total_score += 20;
     printf("========== pass test remove ==========\n");
     return 0;
 }
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
         printf("Usage: ./part1_tester\n");
         return 1;
     }
-  
+
     ec = new extent_client();
 
     if (test_create_and_getattr() != 0)
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
     if (test_indirect() != 0)
         goto test_finish;
 
-test_finish:
+    test_finish:
     printf("---------------------------------\n");
     printf("Part1 score is : %d/100\n", total_score);
     return 0;

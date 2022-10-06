@@ -21,7 +21,7 @@
 int myid;
 chfs_client *chfs;
 
-int id() { 
+int id() {
     return myid;
 }
 
@@ -90,7 +90,7 @@ getattr(chfs_client::inum inum, struct stat &st)
 //
 void
 fuseserver_getattr(fuse_req_t req, fuse_ino_t ino,
-        struct fuse_file_info *fi)
+                   struct fuse_file_info *fi)
 {
     struct stat st;
     chfs_client::inum inum = ino; // req->in.h.nodeid;
@@ -119,18 +119,21 @@ fuseserver_getattr(fuse_req_t req, fuse_ino_t ino,
 //
 void
 fuseserver_setattr(fuse_req_t req, fuse_ino_t ino, struct stat *attr,
-        int to_set, struct fuse_file_info *fi)
+                   int to_set, struct fuse_file_info *fi)
 {
     printf("fuseserver_setattr 0x%x\n", to_set);
     if (FUSE_SET_ATTR_SIZE & to_set) {
         printf("   fuseserver_setattr set size to %zu\n", attr->st_size);
 
-#if 0
-    struct stat st;
-    // Change the above line to "#if 1", and your code goes here
-    // Note: fill st using getattr before fuse_reply_attr
+#if 1
+        struct stat st;
+        // Change the above line to "#if 1", and your code goes here
+        // Note: fill st using getattr before fuse_reply_attr
+        chfs_client::inum inum = ino;
+        getattr(inum, st);
+        fuse_reply_attr(req, &st, 0);
 #else
-    fuse_reply_err(req, ENOSYS);
+        fuse_reply_err(req, ENOSYS);
 #endif
 
     } else {
@@ -146,16 +149,25 @@ fuseserver_setattr(fuse_req_t req, fuse_ino_t ino, struct stat *attr,
 // end of the file, read just that many bytes. If @off is greater
 // than or equal to the size of the file, read zero bytes.
 //
-// Ignore @fi. 
-// @req identifies this request, and is used only to send a 
+// Ignore @fi.
+// @req identifies this request, and is used only to send a
 // response back to fuse with fuse_reply_buf or fuse_reply_err.
 //
 void
 fuseserver_read(fuse_req_t req, fuse_ino_t ino, size_t size,
-        off_t off, struct fuse_file_info *fi)
+                off_t off, struct fuse_file_info *fi)
 {
-#if 0
+#if 1
     // Change the above "#if 0" to "#if 1", and your code goes here
+    chfs_client::inum  inum = ino;
+    std::string buf;
+    if(chfs->read(inum, size, off, buf) != chfs_client::OK) {
+        fuse_reply_err(req, ENOSYS);
+    } else {
+        //TODO: use c_str or data ?
+        fuse_reply_buf(req, buf.data(), buf.size());
+    }
+
 #else
     fuse_reply_err(req, ENOSYS);
 #endif
@@ -175,34 +187,43 @@ fuseserver_read(fuse_req_t req, fuse_ino_t ino, size_t size,
 //
 // Ignore @fi.
 //
-// @req identifies this request, and is used only to send a 
+// @req identifies this request, and is used only to send a
 // response back to fuse with fuse_reply_write or fuse_reply_err.
 //
 void
 fuseserver_write(fuse_req_t req, fuse_ino_t ino,
-        const char *buf, size_t size, off_t off,
-        struct fuse_file_info *fi)
+                 const char *buf, size_t size, off_t off,
+                 struct fuse_file_info *fi)
 {
-#if 0
+#if 1
     // Change the above line to "#if 1", and your code goes here
+    int r;
+    chfs_client::inum  inum = ino;
+    if(chfs->write(inum, size, off, buf, size) != chfs_client::OK) {
+        fuse_reply_err(req, ENOENT);
+    } else {
+        //TODO: use c_str or data ?
+        fuse_reply_write(req, size);
+    }
+
 #else
     fuse_reply_err(req, ENOSYS);
 #endif
 }
 
 //
-// Create file @name in directory @parent. 
+// Create file @name in directory @parent.
 //
 // - @mode specifies the create mode of the file. Ignore it - you do not
 //   have to implement file mode.
 // - If a file named @name already exists in @parent, return EXIST.
-// - Pick an ino (with type of chfs_client::inum) for file @name. 
+// - Pick an ino (with type of chfs_client::inum) for file @name.
 //   Make sure ino indicates a file, not a directory!
 // - Create an empty extent for ino.
 // - Add a <name, ino> entry into @parent.
 // - Change the parent's mtime and ctime to the current time/date
 //   (this may fall naturally out of your extent server code).
-// - On success, store the inum of newly created file into @e->ino, 
+// - On success, store the inum of newly created file into @e->ino,
 //   and the new file's attribute into @e->attr. Get the file's
 //   attributes with getattr().
 //
@@ -210,7 +231,7 @@ fuseserver_write(fuse_req_t req, fuse_ino_t ino,
 //
 chfs_client::status
 fuseserver_createhelper(fuse_ino_t parent, const char *name,
-        mode_t mode, struct fuse_entry_param *e, int type)
+                        mode_t mode, struct fuse_entry_param *e, int type)
 {
     int ret;
     // In chfs, timeouts are always set to 0.0, and generations are always set to 0
@@ -220,9 +241,9 @@ fuseserver_createhelper(fuse_ino_t parent, const char *name,
 
     chfs_client::inum inum;
     if ( type == extent_protocol::T_FILE )
-		ret = chfs->create(parent, name, mode, inum);
-	else 
-		ret = chfs->mkdir(parent,name,mode,inum);
+        ret = chfs->create(parent, name, mode, inum);
+    else
+        ret = chfs->mkdir(parent,name,mode,inum);
     if (ret != chfs_client::OK)
         return ret;
     e->ino = inum;
@@ -232,7 +253,7 @@ fuseserver_createhelper(fuse_ino_t parent, const char *name,
 
 void
 fuseserver_create(fuse_req_t req, fuse_ino_t parent, const char *name,
-        mode_t mode, struct fuse_file_info *fi)
+                  mode_t mode, struct fuse_file_info *fi)
 {
     struct fuse_entry_param e;
     chfs_client::status ret;
@@ -248,8 +269,8 @@ fuseserver_create(fuse_req_t req, fuse_ino_t parent, const char *name,
     }
 }
 
-void fuseserver_mknod( fuse_req_t req, fuse_ino_t parent, 
-        const char *name, mode_t mode, dev_t rdev ) {
+void fuseserver_mknod( fuse_req_t req, fuse_ino_t parent,
+                       const char *name, mode_t mode, dev_t rdev ) {
     struct fuse_entry_param e;
     chfs_client::status ret;
     if( (ret = fuseserver_createhelper( parent, name, mode, &e, extent_protocol::T_FILE)) == chfs_client::OK ) {
@@ -278,8 +299,8 @@ fuseserver_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
     e.generation = 0;
     bool found = false;
 
-     chfs_client::inum ino;
-     chfs->lookup(parent, name, found, ino);
+    chfs_client::inum ino;
+    chfs->lookup(parent, name, found, ino);
 
     if (found) {
         e.ino = ino;
@@ -311,7 +332,7 @@ void dirbuf_add(struct dirbuf *b, const char *name, fuse_ino_t ino)
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
 int reply_buf_limited(fuse_req_t req, const char *buf, size_t bufsize,
-        off_t off, size_t maxsize)
+                      off_t off, size_t maxsize)
 {
     if ((size_t)off < bufsize)
         return fuse_reply_buf(req, buf + off, min(bufsize - off, maxsize));
@@ -330,7 +351,7 @@ int reply_buf_limited(fuse_req_t req, const char *buf, size_t bufsize,
 //
 void
 fuseserver_readdir(fuse_req_t req, fuse_ino_t ino, size_t size,
-        off_t off, struct fuse_file_info *fi)
+                   off_t off, struct fuse_file_info *fi)
 {
     chfs_client::inum inum = ino; // req->in.h.nodeid;
     struct dirbuf b;
@@ -357,7 +378,7 @@ fuseserver_readdir(fuse_req_t req, fuse_ino_t ino, size_t size,
 
 void
 fuseserver_open(fuse_req_t req, fuse_ino_t ino,
-        struct fuse_file_info *fi)
+                struct fuse_file_info *fi)
 {
     fuse_reply_open(req, fi);
 }
@@ -367,14 +388,14 @@ fuseserver_open(fuse_req_t req, fuse_ino_t ino,
 // Leave new directory's inum in e.ino and attributes in e.attr.
 //
 // The new directory should be empty (no . or ..).
-// 
+//
 // If a file/directory named @name already exists, indicate error EEXIST.
 //
 // Ignore mode.
 //
 void
 fuseserver_mkdir(fuse_req_t req, fuse_ino_t parent, const char *name,
-        mode_t mode)
+                 mode_t mode)
 {
     struct fuse_entry_param e;
     // In chfs, timeouts are always set to 0.0, and generations are always set to 0
@@ -384,8 +405,18 @@ fuseserver_mkdir(fuse_req_t req, fuse_ino_t parent, const char *name,
     // Suppress compiler warning of unused e.
     (void) e;
 
-#if 0
+#if 1
     // Change the above line to "#if 1", and your code goes here
+    switch (fuseserver_createhelper(parent, name, mode, &e, extent_protocol::T_DIR)) {
+        case chfs_client::OK :
+            fuse_reply_entry(req, &e);
+            break;
+        case chfs_client::EXIST :
+            fuse_reply_err(req, EEXIST);
+            break;
+        default:
+            fuse_reply_err(req, ENOENT);
+    }
 #else
     fuse_reply_err(req, ENOSYS);
 #endif
@@ -496,8 +527,8 @@ main(int argc, char *argv[])
 
     fuse_args args = FUSE_ARGS_INIT( fuse_argc, (char **) fuse_argv );
     int foreground;
-    int res = fuse_parse_cmdline( &args, &mountpoint, 0 /*multithreaded*/, 
-            &foreground );
+    int res = fuse_parse_cmdline( &args, &mountpoint, 0 /*multithreaded*/,
+                                  &foreground );
     if( res == -1 ) {
         fprintf(stderr, "fuse_parse_cmdline failed\n");
         return 0;
@@ -514,7 +545,7 @@ main(int argc, char *argv[])
     struct fuse_session *se;
 
     se = fuse_lowlevel_new(&args, &fuseserver_oper, sizeof(fuseserver_oper),
-            NULL);
+                           NULL);
     if(se == 0){
         fprintf(stderr, "fuse_lowlevel_new failed\n");
         exit(1);
