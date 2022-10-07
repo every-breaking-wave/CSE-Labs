@@ -10,6 +10,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+//#define DEBUG
+
 chfs_client::chfs_client() {
     ec = new extent_client();
 
@@ -41,16 +43,9 @@ chfs_client::isfile(inum inum) {
     extent_protocol::attr a;
 
     if (ec->getattr(inum, a) != extent_protocol::OK) {
-        printf("error getting attr\n");
         return false;
     }
-
-    if (a.type == extent_protocol::T_FILE) {
-        printf("isfile: %lld is a file\n", inum);
-        return true;
-    }
-    printf("isfile: %lld is a dir\n", inum);
-    return false;
+    return a.type == extent_protocol::T_FILE;
 }
 
 /** Your code here for Lab...
@@ -62,7 +57,27 @@ chfs_client::isfile(inum inum) {
 bool
 chfs_client::isdir(inum inum) {
     // Oops! is this still correct when you implement symlink?
-    return !isfile(inum);
+    // well, sure it should be corrected
+    extent_protocol::attr a;
+
+    if (ec->getattr(inum, a) != extent_protocol::OK) {
+        return false;
+    }
+    return a.type == extent_protocol::T_DIR;
+}
+
+bool
+chfs_client::issymlink(inum inum)
+{
+    extent_protocol::attr a;
+
+    if (ec->getattr(inum, a) != extent_protocol::OK) {
+        printf("error getting attr\n");
+        return false;
+    }
+    return a.type == extent_protocol::T_SYMLINK;
+
+
 }
 
 int
@@ -140,23 +155,24 @@ chfs_client::setattr(inum ino, size_t size) {
 int
 chfs_client::create(inum parent, const char *name, mode_t mode, inum &ino_out) {
     int r = OK;
-
+#ifdef DEBUG
+    printf("\tfuse:im create, inum:%llu, name:%s\n", parent, name);
+#endif
     /*
      * your code goes here.
      * note: lookup is what you need to check if file exist;
      * after create file or dir, you must remember to modify the parent infomation.
      */
     std::string buf, append_str;
-    inum new_file_inum;
     bool if_exist;
 
     // 判断改文件名是否已经存在
-    if (lookup(parent, name, if_exist, new_file_inum) != OK) {
+    if (lookup(parent, name, if_exist, ino_out) != OK) {
         r = EXIST;
         goto release;
     }
     // 在当前目录下创建新文件
-    if (ec->create(extent_protocol::types::T_FILE, new_file_inum) != extent_protocol::OK) {
+    if (ec->create(extent_protocol::types::T_FILE, ino_out) != extent_protocol::OK) {
         r = IOERR;
         goto release;
     }
@@ -166,7 +182,7 @@ chfs_client::create(inum parent, const char *name, mode_t mode, inum &ino_out) {
         goto release;
     }
     // 将新建文件的entry添加到原目录
-    append_str = '&' + std::string(name) + '\\' + std::to_string(new_file_inum);
+    append_str = std::string(name) + '/' + std::to_string(ino_out) + '&';
     buf.append(append_str);
     if (ec->put(parent, buf) != extent_protocol::OK) {
         r = IOERR;
@@ -187,16 +203,15 @@ chfs_client::mkdir(inum parent, const char *name, mode_t mode, inum &ino_out) {
      */
 
     std::string buf, append_str;
-    inum new_dir_inum;
     bool if_exist;
 
     // 判断改文件名是否已经存在
-    if (lookup(parent, name, if_exist, new_dir_inum) != OK) {
+    if (lookup(parent, name, if_exist, ino_out) != OK) {
         r = EXIST;
         goto release;
     }
     // 在当前目录下创建新目录
-    if (ec->create(extent_protocol::types::T_DIR, new_dir_inum) != extent_protocol::OK) {
+    if (ec->create(extent_protocol::types::T_DIR, ino_out) != extent_protocol::OK) {
         r = IOERR;
         goto release;
     }
@@ -206,7 +221,7 @@ chfs_client::mkdir(inum parent, const char *name, mode_t mode, inum &ino_out) {
         goto release;
     }
     // 将新建文件的entry添加到原目录
-    append_str = '&' + std::string(name) + '\\' + std::to_string(new_dir_inum);
+    append_str =  std::string(name) + '/' + std::to_string(ino_out) +'&';
     buf.append(append_str);
     if (ec->put(parent, buf) != extent_protocol::OK) {
         r = IOERR;
@@ -225,7 +240,10 @@ chfs_client::lookup(inum parent, const char *name, bool &found, inum &ino_out) {
      * note: lookup file from parent dir according to name;
      * you should design the format of directory content.
      */
-    std::list <dirent_t> dirent_list;
+#ifdef DEBUG
+    printf("look up inum: %lld, name: %s\n:", parent, name);
+#endif
+    std::list <dirent> dirent_list;
 
     this->readdir(parent, dirent_list);
 
@@ -233,18 +251,10 @@ chfs_client::lookup(inum parent, const char *name, bool &found, inum &ino_out) {
         found = false;
         goto release;
     }
-//    for (auto entry: dirent_list) {
-//        if (!entry.name.compare(name)) {
-//            found = true;
-//            ino_out = entry.inum;
-//            goto release;
-//        }
-//    }
-    for (std::list<dirent>::iterator it = dirent_list.begin(); it != dirent_list.end(); it++) {
-        if (it->name.compare(name) == 0) {
-            // exist
+    for (auto entry: dirent_list) {
+        if (!entry.name.compare(name)) {
             found = true;
-            ino_out = it->inum;
+            ino_out = entry.inum;
             goto release;
         }
     }
@@ -254,7 +264,7 @@ chfs_client::lookup(inum parent, const char *name, bool &found, inum &ino_out) {
 }
 
 int
-chfs_client::readdir(inum dir, std::list <dirent_t> &list) {
+chfs_client::readdir(inum dir, std::list <dirent> &list) {
     int r = OK;
 
     /*
@@ -262,26 +272,32 @@ chfs_client::readdir(inum dir, std::list <dirent_t> &list) {
      * note: you should parse the dirctory content using your defined format,
      * and push the dirents to the list.
      */
-    // my format:  name/inum&name&inum.....
+    // my format:  name/inum&name/inum.....
     std::string data;
     int pos_begin = 0;
     int pos_end = 0;
     std::string name, inum;
     struct dirent dir_entry;
+    if(!isdir(dir)){
+        r = NOENT;
+        goto release;
+    }
     if (ec->get(dir, data) != extent_protocol::OK) {
         r = IOERR;
         goto release;
     }
-    while (std::string::npos != pos_begin) {
+    pos_end = data.find('/', pos_begin);
+    while (std::string::npos != pos_end) {
         pos_end = data.find('/', pos_begin);
         name = data.substr(pos_begin, pos_end - pos_begin);
         pos_begin = pos_end + 1;
         pos_end = data.find('&', pos_begin);
         inum = data.substr(pos_begin, pos_end - pos_begin);
-        dir_entry.inum = strtoull(inum.c_str(), NULL, 10);
+        dir_entry.inum = n2i(inum);
         dir_entry.name = name;
         list.push_back(dir_entry);
         pos_begin = pos_end + 1;
+        pos_end = data.find('/', pos_begin);
     }
     release:
     return r;
@@ -351,21 +367,72 @@ int chfs_client::unlink(inum parent, const char *name) {
      * and update the parent directory content.
      */
 
-    bool found = false;  // not necessary
+    bool found = false;
     inum inum;
     lookup(parent, name, found, inum);
 
+    // can't unlink directory
+    if(isdir(inum)) {
+        return r;
+    }
     ec->remove(inum);
 
-    // update parent directory content
     std::string buf;
-    ec->get(parent, buf);
+    if(ec->get(parent, buf) != extent_protocol::OK){
+        r = IOERR;
+        return r;
+    }
     int erase_start = buf.find(name);
-    int erase_after = buf.find('/', erase_start);
+    int erase_after = buf.find('&', erase_start);
     buf.erase(erase_start, erase_after - erase_start + 1);
-    ec->put(parent, buf);
-
+    if(ec->put(parent, buf) != extent_protocol::OK) {
+        r = IOERR;
+    }
     return r;
 
 }
 
+int chfs_client::link(inum parent, const char *name, const char* link_path, inum & ino_out) {
+    int r = OK;
+    bool found = false;
+    inum inum;
+    lookup(parent, name, found, inum);
+    std::string buf, append_str;
+
+    if (found){
+        r = EXIST;
+        goto release;
+    }
+
+    if(ec->create(extent_protocol::T_SYMLINK, ino_out) != extent_protocol::OK){
+        r = IOERR;
+        goto release;
+    }
+    if(ec->put(ino_out, std::string(link_path)) != extent_protocol::OK) {
+        r = IOERR;
+        goto release;
+    }
+    
+    if(ec->get(parent, buf) != extent_protocol::OK) {
+        r = IOERR;
+        goto release;
+    }
+
+    // 将新建文件的entry添加到原目录
+    append_str =  std::string(name) + '/' + std::to_string(ino_out) +'&';
+    buf.append(append_str);
+    if (ec->put(parent, buf) != extent_protocol::OK) {
+        r = IOERR;
+    }
+
+    release:
+    return r;
+}
+
+int chfs_client::readlink(inum ino, std::string &data) {
+    int r = OK;
+    if(ec->get(ino, data) != extent_protocol::OK){
+        r = IOERR;
+    }
+    return r;
+}

@@ -28,7 +28,8 @@ then
     exit
 fi
 
-rm ${DIR}/hosts_copy 
+rm ${DIR}/hosts_copy
+echo "test3"
 touch ${DIR}/hosts_copy
 diff ${DIR}/testhostslink ${DIR}/hosts_copy >/dev/null 2>&1
 if [ $? -ne 0 ];

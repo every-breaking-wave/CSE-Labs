@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-//#define  DEBUG
+#define  DEBUG
 
 extent_server::extent_server()
 {
@@ -42,7 +42,7 @@ int extent_server::put(extent_protocol::extentid_t id, std::string buf, int &)
 
 int extent_server::get(extent_protocol::extentid_t id, std::string &buf)
 {
-//  printf("extent_server: get %lld\n", id);
+  printf("extent_server: get %lld\n", id);
 
     id &= 0x7fffffff;
 
