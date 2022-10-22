@@ -7,11 +7,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#define  DEBUG
 
 #include "extent_server.h"
 #include "persister.h"
 
-extent_server::extent_server() 
+extent_server::extent_server()
 {
   im = new inode_manager();
   _persister = new chfs_persister("log"); // DO NOT change the dir name here
@@ -21,65 +22,74 @@ extent_server::extent_server()
 
 int extent_server::create(uint32_t type, extent_protocol::extentid_t &id)
 {
-  // alloc a new inode and return inum
-  printf("extent_server: create inode\n");
-  id = im->alloc_inode(type);
+    // alloc a new inode and return inum
+#ifdef DEBUG
+    printf("extent_server: create inode\n");
+#endif
+    id = im->alloc_inode(type);
 
-  return extent_protocol::OK;
+    return extent_protocol::OK;
 }
 
 int extent_server::put(extent_protocol::extentid_t id, std::string buf, int &)
 {
-  id &= 0x7fffffff;
-  
-  const char * cbuf = buf.c_str();
-  int size = buf.size();
-  im->write_file(id, cbuf, size);
-  
-  return extent_protocol::OK;
+    id &= 0x7fffffff;
+
+    const char * cbuf = buf.c_str();
+    int size = buf.size();
+//    printf("id : %lld size : %d\n", id, size);
+
+//    printf("id : %lld cbuf: %s size : %d\n", id, cbuf, size);
+    im->write_file(id, cbuf, size);
+
+    return extent_protocol::OK;
 }
 
 int extent_server::get(extent_protocol::extentid_t id, std::string &buf)
 {
   printf("extent_server: get %lld\n", id);
 
-  id &= 0x7fffffff;
+    id &= 0x7fffffff;
 
-  int size = 0;
-  char *cbuf = NULL;
+    int size = 0;
+    char *cbuf = NULL;
 
-  im->read_file(id, &cbuf, &size);
-  if (size == 0)
-    buf = "";
-  else {
-    buf.assign(cbuf, size);
-    free(cbuf);
-  }
+    im->read_file(id, &cbuf, &size);
+    if (size == 0)
+        buf = "";
+    else {
+        buf.assign(cbuf, size);
+        free(cbuf);
+    }
 
-  return extent_protocol::OK;
+    return extent_protocol::OK;
 }
 
 int extent_server::getattr(extent_protocol::extentid_t id, extent_protocol::attr &a)
 {
-  printf("extent_server: getattr %lld\n", id);
+#ifdef DEBUG
+    printf("extent_server: getattr %lld\n", id);
+#endif
 
-  id &= 0x7fffffff;
-  
-  extent_protocol::attr attr;
-  memset(&attr, 0, sizeof(attr));
-  im->get_attr(id, attr);
-  a = attr;
+    id &= 0x7fffffff;
 
-  return extent_protocol::OK;
+    extent_protocol::attr attr;
+    memset(&attr, 0, sizeof(attr));
+    im->get_attr(id, attr);
+    a = attr;
+
+    return extent_protocol::OK;
 }
 
 int extent_server::remove(extent_protocol::extentid_t id, int &)
 {
-  printf("extent_server: write %lld\n", id);
 
-  id &= 0x7fffffff;
-  im->remove_file(id);
- 
-  return extent_protocol::OK;
+#ifdef DEBUG
+    printf("extent_server: create inode\n");
+#endif
+    id &= 0x7fffffff;
+    im->remove_file(id);
+
+    return extent_protocol::OK;
 }
 
