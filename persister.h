@@ -5,8 +5,10 @@
 #include <mutex>
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
+#include <algorithm>
+#include <vector>
 #include "rpc.h"
-
 #define MAX_LOG_SZ 131072
 
 #define DEBUG
@@ -21,6 +23,8 @@
  * 3. each chfs_commands contains transaction ID, command type, and other information.
  * 4. you can treat a chfs_command as a log entry.
  */
+
+
 class chfs_command {
 public:
     typedef unsigned long long txid_t;
@@ -90,6 +94,7 @@ public:
     // You may modify parameters in these functions
     void append_log(command& log);
     void checkpoint();
+    size_t get_file_size(std::string filename);
 
     // restore data from solid binary file
     // You may modify parameters in these functions
@@ -106,7 +111,6 @@ private:
     std::string file_dir;
     std::string file_path_checkpoint;
     std::string file_path_logfile;
-
     // restored log data
     std::vector<command> log_entries;
 };
@@ -143,6 +147,13 @@ void persister<command>::append_log(command& log) {
 #ifdef DEBUG
     std::cout<<"log size : "<<log_size<<std::endl;
 #endif
+    // 写入前判断logfile_size
+    if(log_size + get_file_size(file_path_logfile) > MAX_LOG_SZ) {
+        // 进行checkpoint
+
+        checkpoint();
+    }
+
     out.write((char*)&(log_size), sizeof(uint32_t));
     out.write(buf, log_size);
     out.close();
@@ -151,7 +162,60 @@ void persister<command>::append_log(command& log) {
 template<typename command>
 void persister<command>::checkpoint() {
     // Your code here for lab2A
+    // delete committed logs
+    restore_logdata();
+    std::vector<chfs_command> logs = get_log_entry_vector();
+    std::vector<chfs_command::txid_t> committed_tx_vector;
+    int bef_size = logs.size();
+    for(chfs_command log : logs) {
+        if(log.type == chfs_command::CMD_COMMIT) {
+            committed_tx_vector.template emplace_back(log.id);
+        }
+    }
+    // 根据id删除已经commit的tx
+//    logs.erase(std::remove_if(logs.begin(), logs.end(), [=](chfs_command log){
+//        // 若找到，则删除该log
+//        return !(std::find_if(committed_tx_vector.begin(), committed_tx_vector.end(), log.id) == committed_tx_vector.end());
+//    }), logs.end());
 
+    std::vector<chfs_command>::iterator it;
+    for (it = logs.begin();  it != logs.end() ; ) {
+        if(std::count(committed_tx_vector.begin(), committed_tx_vector.end(), (*it).id)){
+            it = logs.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    printf("bef size %d , now size %d\n", bef_size, logs.size());
+
+
+//
+//#ifdef DEBUG
+//    printf("oversize\n");
+//#endif
+//    std::fstream in(file_path_logfile, std::ios::binary | std::ios::in);
+//    std::fstream out(file_path_checkpoint, std::ios::binary | std::ios::out | std::ios::app);
+//    if (!in.is_open()) {
+//        std::cout << "Error 1: Fail to open the source file." << std::endl;
+//        // 关闭文件对象
+//        in.close();
+//        out.close();
+//        return;
+//    }
+//    if (!out.is_open()) {
+//        std::cout << "Error 2: Fail to pen the target file." << std::endl;
+//        in.close();
+//        out.close();
+//        return;
+//    }
+//
+//    out << in.rdbuf();
+//    in.clear();
+//    out.close();
+//    in.close();
+//
+//    std::fstream fs(file_path_logfile, std::fstream::out | std::ios_base::trunc);
+//    fs.close();
 }
 
 template<typename command>
@@ -191,7 +255,7 @@ void persister<command>::restore_logdata() {
 #endif
 
 
-};
+}
 
 template<typename command>
 void persister<command>::restore_checkpoint() {
@@ -208,7 +272,28 @@ command persister<command>::form_command_by_params(unsigned long long id, chfs_c
     return log;
 }
 
+template<typename command>
+size_t persister<command>::get_file_size(std::string filename) {
+    const char * fileName = filename.c_str();
+    if (fileName == NULL) {
+        return 0;
+    }
+
+    // 这是一个存储文件(夹)信息的结构体，其中有文件大小和创建时间、访问时间、修改时间等
+    struct stat statbuf;
+
+    // 提供文件名字符串，获得文件属性结构体
+    stat(fileName, &statbuf);
+
+    // 获取文件大小
+    size_t filesize = statbuf.st_size;
+
+    return filesize;
+}
+
 
 using chfs_persister = persister<chfs_command>;
+
+
 
 #endif // persister_h

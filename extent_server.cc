@@ -20,13 +20,21 @@ extent_server::extent_server()
   // Your code here for Lab2A: recover data on startup
   _persister->restore_logdata();
   std::vector<chfs_command> logs = _persister->get_log_entry_vector();
-  if(logs.size() == 0)
+#ifdef DEBUG
+    printf("read log over log size is %d\n", logs.size());
+#endif
+    // redo not committed tx
+    if(logs.size() == 0) {
       return;
-  // redo not committed tx
+  }
     int beg_pos = 0, size = logs.size();
     std::vector<chfs_command> tem_log_vector;
-    while (true){
+    while (beg_pos < size){
         if (logs[beg_pos].type == chfs_command::CMD_BEGIN) {
+#ifdef DEBUG
+            printf("a new tx begin\n");
+#endif
+            beg_pos++;
             for (int i = beg_pos; i < size; ++i) {
                 switch (logs[i].type) {
                     case chfs_command::CMD_COMMIT:   // 该 tx 已提交
