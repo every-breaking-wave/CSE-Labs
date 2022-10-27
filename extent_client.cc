@@ -42,6 +42,7 @@ extent_client::put(extent_protocol::extentid_t eid, std::string buf)
 {
   extent_protocol::status ret = extent_protocol::OK;
   int r;
+    printf("in extent client, size is %d\n", buf.size());
   ret = es->put(eid, buf, r);
   return ret;
 }
@@ -53,6 +54,21 @@ extent_client::remove(extent_protocol::extentid_t eid)
   int r;
   ret = es->remove(eid, r);
   return ret;
+}
+
+extent_protocol::status
+extent_client::begin(uint64_t & tx_id){
+    extent_protocol::status ret = extent_protocol::OK;
+    ret = es->begin(tx_id);
+    return ret;
+}
+
+
+extent_protocol::status
+extent_client::commit(uint64_t &tx_id) {
+    extent_protocol::status ret = extent_protocol::OK;
+    ret = es->commit(tx_id);
+    return ret;
 }
 
 

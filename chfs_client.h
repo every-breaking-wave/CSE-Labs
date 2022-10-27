@@ -5,10 +5,11 @@
 //#include "chfs_protocol.h"
 #include "extent_client.h"
 #include <vector>
-
+#include "persister.h"
 
 class chfs_client {
     extent_client *ec;
+    chfs_persister * cp;
 public:
 
     typedef unsigned long long inum;

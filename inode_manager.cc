@@ -6,6 +6,7 @@
 
 
 #define MIN(a, b) ((a)<(b) ? (a) : (b))
+#define MAX(a, b) ((a)>(b) ? (a) : (b))
 //#define DEBUG
 // disk layer -----------------------------------------
 
@@ -334,8 +335,8 @@ inode_manager::write_file(uint32_t inum, const char *buf, int size) {
         return;
     int block_size_before = inode->size == 0 ? 0 : ((inode->size - 1) / BLOCK_SIZE + 1);
     int block_size_after = size == 0 ? 0 : ((size - 1) / BLOCK_SIZE + 1);
-    int min_block = min(block_size_before, block_size_after);
-    int max_block = max(block_size_after, block_size_before);
+    int min_block = MIN(block_size_before, block_size_after);
+    int max_block = MAX(block_size_after, block_size_before);
 
 #ifdef DEBUG
     printf("bef: %d, after: %d\n", block_size_before, block_size_after);

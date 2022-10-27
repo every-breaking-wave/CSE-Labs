@@ -10,8 +10,8 @@
 #define DISK_SIZE  1024*1024*16
 #define BLOCK_SIZE 512
 #define BLOCK_NUM  (DISK_SIZE/BLOCK_SIZE)
-#define min(a, b) (a < b) ? a : b
-#define max(a, b) (a > b) ? a : b
+//#define min(a, b) (a < b) ? a : b
+//#define max(a, b) (a > b) ? a : b
 typedef uint32_t blockid_t;
 
 // disk layer -----------------------------------------
