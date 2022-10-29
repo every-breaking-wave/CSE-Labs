@@ -8,7 +8,9 @@
 #include <sys/stat.h>
 #include <algorithm>
 #include <vector>
+#include <assert.h>
 #include "rpc.h"
+#include "extent_server.h"
 #define MAX_LOG_SZ 131072
 
 #define DEBUG
@@ -93,16 +95,22 @@ public:
     // persist data into solid binary file
     // You may modify parameters in these functions
     void append_log(command& log);
-    void checkpoint();
+    void checkpoint(std::string & buf);
     size_t get_file_size(std::string filename);
+    bool should_check_point();
 
     // restore data from solid binary file
     // You may modify parameters in these functions
     void restore_logdata();
     void restore_checkpoint();
+    uint32_t get_log_size(){return log_size;}
+    void set_log_size(uint32_t new_size) {}
     command form_command_by_params(unsigned long long id, chfs_command::cmd_type type, std::string info);
     std::vector<command> get_log_entry_vector(){
         return log_entries;
+    }
+    std::vector<std::pair<uint32_t , std::pair<uint32_t, std::string> > > get_checkpoint_pair_vec(){
+        return checkpoint_pair_vec;
     }
 
 
@@ -113,6 +121,11 @@ private:
     std::string file_path_logfile;
     // restored log data
     std::vector<command> log_entries;
+    std::vector<std::pair<uint32_t , std::pair<uint32_t, std::string> > > checkpoint_pair_vec;
+
+    uint32_t log_size = 0;
+
+
 };
 
 
@@ -147,24 +160,24 @@ void persister<command>::append_log(command& log) {
 #ifdef DEBUG
     std::cout<<"log size : "<<log_size<<std::endl;
 #endif
-    // 写入前判断logfile_size
-    if(log_size + get_file_size(file_path_logfile) > MAX_LOG_SZ) {
-        // 进行checkpoint
-
-        checkpoint();
-    }
-
     out.write((char*)&(log_size), sizeof(uint32_t));
     out.write(buf, log_size);
     out.close();
 }
 
 template<typename command>
-void persister<command>::checkpoint() {
+void persister<command>::checkpoint(std::string &buf) {
     // Your code here for lab2A
     // delete committed logs
     restore_logdata();
     std::vector<chfs_command> logs = get_log_entry_vector();
+#ifdef DEBUG
+    std::cout<<"begin checkpoint\n";
+    for (int i = 0; i < logs.size(); ++i) {
+        std::cout<<"tx id: "<<logs[i].id<<"type: "<<logs[i].type<<std::endl;
+    }
+#endif
+
     std::vector<chfs_command::txid_t> committed_tx_vector;
     int bef_size = logs.size();
     for(chfs_command log : logs) {
@@ -172,12 +185,6 @@ void persister<command>::checkpoint() {
             committed_tx_vector.template emplace_back(log.id);
         }
     }
-    // 根据id删除已经commit的tx
-//    logs.erase(std::remove_if(logs.begin(), logs.end(), [=](chfs_command log){
-//        // 若找到，则删除该log
-//        return !(std::find_if(committed_tx_vector.begin(), committed_tx_vector.end(), log.id) == committed_tx_vector.end());
-//    }), logs.end());
-
     std::vector<chfs_command>::iterator it;
     for (it = logs.begin();  it != logs.end() ; ) {
         if(std::count(committed_tx_vector.begin(), committed_tx_vector.end(), (*it).id)){
@@ -186,69 +193,52 @@ void persister<command>::checkpoint() {
             ++it;
         }
     }
+    // 删除已经commit的log
     printf("bef size %d , now size %d\n", bef_size, logs.size());
+    std::fstream out(file_path_logfile, std::ios::out | std::ios::trunc | std::ios::binary);
+    for(chfs_command log : logs) {
+        uint32_t log_size = log.size();
+        char *log_buf = new char [log_size];
+        log.to_string(log_buf);
+        out.write((char*)&(log_size), sizeof(uint32_t));
+        out.write(log_buf, log_size);
+    }
+    out.close();
 
-
-//
-//#ifdef DEBUG
-//    printf("oversize\n");
-//#endif
-//    std::fstream in(file_path_logfile, std::ios::binary | std::ios::in);
-//    std::fstream out(file_path_checkpoint, std::ios::binary | std::ios::out | std::ios::app);
-//    if (!in.is_open()) {
-//        std::cout << "Error 1: Fail to open the source file." << std::endl;
-//        // 关闭文件对象
-//        in.close();
-//        out.close();
-//        return;
-//    }
-//    if (!out.is_open()) {
-//        std::cout << "Error 2: Fail to pen the target file." << std::endl;
-//        in.close();
-//        out.close();
-//        return;
-//    }
-//
-//    out << in.rdbuf();
-//    in.clear();
-//    out.close();
-//    in.close();
-//
-//    std::fstream fs(file_path_logfile, std::fstream::out | std::ios_base::trunc);
-//    fs.close();
+    // 对当前文件系统进行 snapshot
+    const char * snapshot = buf.c_str();
+#ifdef DEBUG
+    printf("snapshot size is : %d\n", buf.size());
+#endif
+    std::fstream fp(file_path_checkpoint, std::ios::out | std::ios::binary);
+    if (fp.is_open()){
+        fp.write(snapshot, buf.size());
+    }
+    fp.close();
 }
 
 template<typename command>
 void persister<command>::restore_logdata() {
     // Your code here for lab2A
     std::fstream in(file_path_logfile , std::ios::binary | std::ios::in);
-    if(!in.is_open())
-    {
-        std::cout<<"can not open file\n";
+    if(!in.is_open()){
+        std::cout<<"can not open log file\n";
         return ;
     }
     in.seekg(0, std::ios::end);
     int m = in.tellg();
     in.seekg(0, in.beg);
     int l = in.tellg();
-    printf("file size : %d\n", m - l);
 
     uint32_t log_size;
     log_entries.clear();
     while (in.peek() != EOF) {
-
         in.read((char*)&(log_size), sizeof(uint32_t));
-#ifdef DEBUG
-        std::cout<<"log_size"<<log_size<< "\n";
-#endif
         char buf[log_size];
         in.read(buf, log_size);
         command cmd;
         cmd.to_command(buf);
         log_entries.template emplace_back(cmd);
-#ifdef DEBUG
-        std::cout<<cmd.info<<std::endl;
-#endif
     }
 #ifdef DEBUG
     std::cout<<"entry size : "<<log_entries.size()<<std::endl;
@@ -260,7 +250,54 @@ void persister<command>::restore_logdata() {
 template<typename command>
 void persister<command>::restore_checkpoint() {
     // Your code here for lab2A
+    std::fstream in(file_path_checkpoint, std::ios::binary | std::ios::in);
+#ifdef DEBUG
+    printf("restore checkpoint\n");
+#endif
+    if(in.is_open()){
+        checkpoint_pair_vec.clear();
+        char buf[20];
+        uint32_t size, type, inum;
+        std::string data="";
+        while (in.peek() != EOF){
+            // read file size
+            printf("loop \n");
+            in.read(buf, 16);
+            size = std::stoi(std::string(buf, buf + 16));
+            printf("read size %d\n", size);
+            std::pair<uint32_t , std::pair<uint32_t, std::string> > pair;
+            if(size) {
+                // read file type
+                in.read(buf, 16);
+                type = std::stoi(std::string(buf, buf + 16));
+                printf("read type %d\n", type);
 
+                // read file inum
+                in.read(buf, 16);
+                inum = std::stoi(std::string(buf, buf + 16));
+                printf("read inum %d\n", inum);
+
+                pair.second.first = type;
+                pair.first = inum;
+
+                char tem_data[size];
+                in.read(tem_data, size);
+                data = (std::string(tem_data, tem_data + size));
+                pair.second.second = data;
+                checkpoint_pair_vec.template emplace_back(pair);
+            } else {
+                pair.first = 0;
+                pair.second.first = 0;
+                pair.second.second = "";
+                checkpoint_pair_vec.template emplace_back(pair);
+            }
+
+#ifdef DEBUG
+            printf("type: %d , size : %d  inum %d data : %s\n", type, size,  inum,data);
+#endif
+        }
+    }
+    in.close();
 }
 
 template<typename command>
@@ -289,6 +326,11 @@ size_t persister<command>::get_file_size(std::string filename) {
     size_t filesize = statbuf.st_size;
 
     return filesize;
+}
+
+template<typename command>
+bool persister<command>::should_check_point() {
+    return get_file_size(file_path_logfile) > MAX_LOG_SZ * 0.8;
 }
 
 

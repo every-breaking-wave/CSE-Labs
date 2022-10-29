@@ -7,7 +7,7 @@
 
 #define MIN(a, b) ((a)<(b) ? (a) : (b))
 #define MAX(a, b) ((a)>(b) ? (a) : (b))
-//#define DEBUG
+#define DEBUG
 // disk layer -----------------------------------------
 
 disk::disk() {
@@ -49,7 +49,7 @@ block_manager::alloc_block() {
 
 
     // find a free block
-    if(!lastAllocBlock) {
+    if (!lastAllocBlock) {
         lastAllocBlock = DATABLOCK;
     }
     blockid_t blockid = this->lastAllocBlock;
@@ -306,7 +306,7 @@ inode_manager::read_file(uint32_t inum, char **buf_out, int *size) {
     char buf[BLOCK_SIZE];
     *size = inode->size;
     *buf_out = (char *) malloc(*size);
-    int block_count = inode->size == 0 ? 0: (inode->size - 1) / BLOCK_SIZE + 1;
+    int block_count = inode->size == 0 ? 0 : (inode->size - 1) / BLOCK_SIZE + 1;
     for (int i = 0; i < block_count; ++i) {
         this->bm->read_block(this->get_blockid_by_index(inode, i), buf);
         if (i == block_count - 1 && (inode->size) % BLOCK_SIZE) {  // 对最后一个特殊处理
@@ -394,7 +394,7 @@ inode_manager::get_attr(uint32_t inum, extent_protocol::attr &a) {
     printf("\tim get_attr inum: %d\n", inum);
 #endif
     inode_t *inode = this->get_inode(inum);
-    if(!inode) {
+    if (!inode) {
         return;
     }
     a.type = inode->type;
@@ -427,4 +427,28 @@ inode_manager::remove_file(uint32_t inum) {
     free_inode(inum);
 
     return;
+}
+
+void
+inode_manager::alloc_inode_by_inum(uint32_t type, uint32_t inum) {
+
+    inode_t *inode;
+    inode = get_inode(inum);
+    if (inode != NULL) {
+        return;
+    } else {
+        inode_t *ino;
+        ino = (inode_t *) malloc(sizeof(inode_t));
+        bzero(ino, sizeof(inode_t));
+        ino->type = type;
+        ino->size = 0;
+        unsigned int t = time(NULL);
+        ino->atime = t;
+        ino->mtime = t;
+        ino->ctime = t;
+        put_inode(inum, ino);
+        free(ino);
+        return;
+    }
+
 }

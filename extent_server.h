@@ -34,6 +34,7 @@ class extent_server {
   // Your code here for lab2A: add logging APIs
   int commit(uint64_t & tx_id);
   int begin(uint64_t & tx_id);
+  int get_all_file(std::string &buf);
 };
 
 #endif 

@@ -124,6 +124,8 @@ public:
 
     void free_block_by_index(inode_t *inode, uint32_t index);
 
+    void alloc_inode_by_inum(uint32_t type, uint32_t inum);
+
     blockid_t get_blockid_by_index(inode_t * inode, uint32_t index);
 };
 

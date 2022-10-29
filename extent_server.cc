@@ -19,21 +19,28 @@ extent_server::extent_server()
   tx_id = 0;
   // Your code here for Lab2A: recover data on startup
   _persister->restore_logdata();
+  _persister->restore_checkpoint();
   std::vector<chfs_command> logs = _persister->get_log_entry_vector();
-#ifdef DEBUG
-    printf("read log over log size is %d\n", logs.size());
-#endif
+  auto checkpoint_pairs = _persister->get_checkpoint_pair_vec();
+
+  // 恢复到 checkpoint 的 snapshot
+  if(checkpoint_pairs.size()) {
+      for(auto pair : checkpoint_pairs){
+          if(pair.second.second.size()) {
+              im->alloc_inode_by_inum(pair.second.first, pair.first);
+              im->write_file(pair.first, pair.second.second.c_str(), pair.second.second.size());
+          }
+      }
+  }
+
     // redo not committed tx
     if(logs.size() == 0) {
       return;
-  }
+    }
     int beg_pos = 0, size = logs.size();
     std::vector<chfs_command> tem_log_vector;
     while (beg_pos < size){
         if (logs[beg_pos].type == chfs_command::CMD_BEGIN) {
-#ifdef DEBUG
-            printf("a new tx begin\n");
-#endif
             beg_pos++;
             for (int i = beg_pos; i < size; ++i) {
                 switch (logs[i].type) {
@@ -76,7 +83,8 @@ extent_server::extent_server()
 }
 
 int extent_server::begin(uint64_t &tx_id) {
-    tx_id = ++(this->tx_id);
+    this->tx_id += 1;
+    tx_id = this->tx_id;
 #ifdef DEBUG
     printf("a new tx is created\n");
 #endif
@@ -86,6 +94,11 @@ int extent_server::begin(uint64_t &tx_id) {
 
 int extent_server::commit(uint64_t &tx_id) {
     _persister->append_log(*(new chfs_command(chfs_command::CMD_COMMIT, tx_id, 0, "")));
+    if(_persister->should_check_point()){
+        std::string buf = "";
+        get_all_file(buf);
+        _persister->checkpoint(buf);
+    }
     return extent_protocol::OK;
 }
 
@@ -96,7 +109,7 @@ int extent_server::create(uint32_t type, extent_protocol::extentid_t &id)
     char info[sizeof (uint32_t) + sizeof (extent_protocol::extentid_t)];
 //    memcpy(info, (char*)&type, sizeof (uint32_t));
     // type is required
-    _persister->append_log(*(new chfs_command(chfs_command::CMD_CREATE, 1, 0, std::to_string(type))));
+    _persister->append_log(*(new chfs_command(chfs_command::CMD_CREATE, this->tx_id, 0, std::to_string(type))));
 
 #ifdef DEBUG
     std::cout<<"info: "<<info<<std::endl;
@@ -114,7 +127,7 @@ int extent_server::put(extent_protocol::extentid_t id, std::string buf, int &)
     printf("in extent server , size : %d\n", size);
 #endif
     // buf is required
-    _persister->append_log(*(new chfs_command(chfs_command::CMD_PUT, 1, id, buf)));
+    _persister->append_log(*(new chfs_command(chfs_command::CMD_PUT, this->tx_id, id, buf)));
     im->write_file(id, cbuf, size);
     return extent_protocol::OK;
 }
@@ -163,8 +176,46 @@ int extent_server::remove(extent_protocol::extentid_t id, int &)
 #endif
     id &= 0x7fffffff;
 
-    _persister->append_log(*(new chfs_command(chfs_command::CMD_REMOVE, 1, id, "")));
+    _persister->append_log(*(new chfs_command(chfs_command::CMD_REMOVE, this->tx_id, id, "")));
     im->remove_file(id);
 
+    return extent_protocol::OK;
+}
+
+int extent_server::get_all_file(std::string &buf) {
+    auto convert = [](int num)->std::string {
+        std::string  str = std::to_string(num);
+        while (str.size() < 16) {
+            str = "0" + str;
+        }
+        return str;
+    };
+
+
+    std::string data = "";
+    extent_protocol::attr attr;
+    // 读取整个文件系统所有inode对应的文件内容，以及对应的文件type
+    for (int i = 1; i < INODE_NUM; ++i) {
+        this->get(i, data);
+        this->getattr(i, attr);
+        uint32_t size = data.size();
+        buf.append(convert(size));
+
+        // 若inode未分配， 只记录size = 0，作为填位符，读出时直接跳过这个inode
+        if(size == 0){
+            continue;
+        }
+        buf.append(convert(attr.type));
+        buf.append(convert(i));
+        std::cout<<"attr type is :" + convert(attr.type)<<std::endl;
+        buf.append(data);
+    }
+    printf("get all file size is %d\n", buf.size());
+
+
+    //  test code
+#ifdef DEBUG
+
+#endif
     return extent_protocol::OK;
 }
