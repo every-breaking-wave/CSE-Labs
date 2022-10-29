@@ -26,7 +26,8 @@ extent_server::extent_server()
   // 恢复到 checkpoint 的 snapshot
   if(checkpoint_pairs.size()) {
       for(auto pair : checkpoint_pairs){
-          if(pair.second.second.size()) {
+          if(pair.second.first) {
+              printf("file entry: inum : %d, type : %d, size : %llu\n", pair.first, pair.second.first, pair.second.second.size());
               im->alloc_inode_by_inum(pair.second.first, pair.first);
               im->write_file(pair.first, pair.second.second.c_str(), pair.second.second.size());
           }
@@ -107,7 +108,6 @@ int extent_server::create(uint32_t type, extent_protocol::extentid_t &id)
     // alloc a new inode and return inum
     id = im->alloc_inode(type);
     char info[sizeof (uint32_t) + sizeof (extent_protocol::extentid_t)];
-//    memcpy(info, (char*)&type, sizeof (uint32_t));
     // type is required
     _persister->append_log(*(new chfs_command(chfs_command::CMD_CREATE, this->tx_id, 0, std::to_string(type))));
 
@@ -198,14 +198,14 @@ int extent_server::get_all_file(std::string &buf) {
     for (int i = 1; i < INODE_NUM; ++i) {
         this->get(i, data);
         this->getattr(i, attr);
-        uint32_t size = data.size();
-        buf.append(convert(size));
+        buf.append(convert(attr.type));
 
-        // 若inode未分配， 只记录size = 0，作为填位符，读出时直接跳过这个inode
-        if(size == 0){
+        // 若inode未分配， 只记录 type = 0，作为填位符，读出时直接跳过这个inode
+        if(attr.type == 0){
             continue;
         }
-        buf.append(convert(attr.type));
+        uint32_t size = data.size();
+        buf.append(convert(size));
         buf.append(convert(i));
         std::cout<<"attr type is :" + convert(attr.type)<<std::endl;
         buf.append(data);

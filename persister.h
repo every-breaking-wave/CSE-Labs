@@ -136,6 +136,7 @@ persister<command>::persister(const std::string& dir){
     file_dir = dir;
     file_path_checkpoint = file_dir + "/checkpoint.bin";
     file_path_logfile = file_dir + "/logdata.bin";
+//    log_size = get_file_size(file_path_logfile)
 }
 
 template<typename command>
@@ -163,6 +164,7 @@ void persister<command>::append_log(command& log) {
     out.write((char*)&(log_size), sizeof(uint32_t));
     out.write(buf, log_size);
     out.close();
+    log_size += log_size + sizeof (uint32_t);
 }
 
 template<typename command>
@@ -196,12 +198,14 @@ void persister<command>::checkpoint(std::string &buf) {
     // 删除已经commit的log
     printf("bef size %d , now size %d\n", bef_size, logs.size());
     std::fstream out(file_path_logfile, std::ios::out | std::ios::trunc | std::ios::binary);
+    log_size = 0;
     for(chfs_command log : logs) {
         uint32_t log_size = log.size();
         char *log_buf = new char [log_size];
         log.to_string(log_buf);
         out.write((char*)&(log_size), sizeof(uint32_t));
         out.write(log_buf, log_size);
+        this->log_size += sizeof (uint32_t) + log_size;
     }
     out.close();
 
@@ -262,15 +266,20 @@ void persister<command>::restore_checkpoint() {
         while (in.peek() != EOF){
             // read file size
             printf("loop \n");
+
+
+            // read file type
             in.read(buf, 16);
-            size = std::stoi(std::string(buf, buf + 16));
-            printf("read size %d\n", size);
+            type = std::stoi(std::string(buf, buf + 16));
+            printf("read type %d\n", type);
+
+
             std::pair<uint32_t , std::pair<uint32_t, std::string> > pair;
-            if(size) {
-                // read file type
+            if(type) {
+                // read file size
                 in.read(buf, 16);
-                type = std::stoi(std::string(buf, buf + 16));
-                printf("read type %d\n", type);
+                size = std::stoi(std::string(buf, buf + 16));
+                printf("read size %d\n", size);
 
                 // read file inum
                 in.read(buf, 16);
@@ -285,16 +294,20 @@ void persister<command>::restore_checkpoint() {
                 data = (std::string(tem_data, tem_data + size));
                 pair.second.second = data;
                 checkpoint_pair_vec.template emplace_back(pair);
+#ifdef DEBUG
+                printf("type: %d , size : %d  inum %d data : %s\n", type, size,  inum,data);
+#endif
             } else {
                 pair.first = 0;
                 pair.second.first = 0;
                 pair.second.second = "";
                 checkpoint_pair_vec.template emplace_back(pair);
+#ifdef DEBUG
+                printf("type: %d , size : %d  inum %d data : %s\n", type, size,  inum,data);
+#endif
             }
 
-#ifdef DEBUG
-            printf("type: %d , size : %d  inum %d data : %s\n", type, size,  inum,data);
-#endif
+
         }
     }
     in.close();
