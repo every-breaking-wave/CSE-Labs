@@ -15,18 +15,15 @@
 #define max(a, b) (a > b) ? a : b
 /*
  * Your code here for Lab2A:
- * Here we treat each ChFS operation(especially write operation such as 'create',
- * 'write' and 'symlink') as a transaction, your job is to use write ahead log
+ * Here we treat each ChFS operation(especially write operation such as 'create', 
+ * 'write' and 'symlink') as a transaction, your job is to use write ahead log 
  * to achive all-or-nothing for these transactions.
  */
 
-chfs_client::chfs_client()
+chfs_client::chfs_client(std::string extent_dst, std::string lock_dst)
 {
-    ec = new extent_client();
-}
-
-chfs_client::chfs_client(std::string extent_dst, std::string lock_dst) {
-    ec = new extent_client();
+    ec = new extent_client(extent_dst);
+    lc = new lock_client(lock_dst);
     if (ec->put(1, "") != extent_protocol::OK)
         printf("error init root dir\n"); // XYB: init root dir
 }
@@ -51,6 +48,7 @@ chfs_client::isfile(inum inum) {
     extent_protocol::attr a;
 
     if (ec->getattr(inum, a) != extent_protocol::OK) {
+        printf("error getting attr\n");
         return false;
     }
     return a.type == extent_protocol::T_FILE;
@@ -59,7 +57,7 @@ chfs_client::isfile(inum inum) {
 /** Your code here for Lab...
  * You may need to add routines such as
  * readlink, issymlink here to implement symbolic link.
- *
+ * 
  * */
 
 bool
@@ -74,6 +72,8 @@ chfs_client::isdir(inum inum) {
     return a.type == extent_protocol::T_DIR;
 }
 
+
+
 bool
 chfs_client::issymlink(inum inum)
 {
@@ -87,6 +87,7 @@ chfs_client::issymlink(inum inum)
 
 
 }
+
 
 int
 chfs_client::getfile(inum inum, fileinfo &fin) {
@@ -172,9 +173,7 @@ chfs_client::setattr(inum ino, size_t size) {
 int
 chfs_client::create(inum parent, const char *name, mode_t mode, inum &ino_out) {
     int r = OK;
-#ifdef DEBUG
-    printf("\tfuse:im create, inum:%llu, name:%s\n", parent, name);
-#endif
+
     /*
      * your code goes here.
      * note: lookup is what you need to check if file exist;

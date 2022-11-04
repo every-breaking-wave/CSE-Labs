@@ -2,15 +2,17 @@
 #define chfs_client_h
 
 #include <string>
-//#include "chfs_protocol.h"
+#include "lock_protocol.h"
+#include "lock_client.h"
 #include "extent_client.h"
 #include <vector>
 #include "persister.h"
 
 class chfs_client {
-    extent_client *ec;
     chfs_persister * cp;
-public:
+  extent_client *ec;
+  lock_client *lc;
+ public:
 
     typedef unsigned long long inum;
     enum xxstatus { OK, RPCERR, NOENT, IOERR, EXIST };
@@ -36,15 +38,14 @@ private:
     static std::string filename(inum);
     static inum n2i(std::string);
 
-public:
-    chfs_client();
-    chfs_client(std::string, std::string);
+ public:
+  chfs_client(std::string, std::string);
 
-    bool isfile(inum);
-    bool isdir(inum);
+  bool isfile(inum);
+  bool isdir(inum);
 
-    int getfile(inum, fileinfo &);
-    int getdir(inum, dirinfo &);
+  int getfile(inum, fileinfo &);
+  int getdir(inum, dirinfo &);
 
     int setattr(inum, size_t);
     int lookup(inum, const char *, bool &, inum &);
