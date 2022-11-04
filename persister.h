@@ -255,9 +255,6 @@ template<typename command>
 void persister<command>::restore_checkpoint() {
     // Your code here for lab2A
     std::fstream in(file_path_checkpoint, std::ios::binary | std::ios::in);
-#ifdef DEBUG
-    printf("restore checkpoint\n");
-#endif
     if(in.is_open()){
         checkpoint_pair_vec.clear();
         char buf[20];
@@ -294,17 +291,11 @@ void persister<command>::restore_checkpoint() {
                 data = (std::string(tem_data, tem_data + size));
                 pair.second.second = data;
                 checkpoint_pair_vec.template emplace_back(pair);
-#ifdef DEBUG
-                printf("type: %d , size : %d  inum %d data : %s\n", type, size,  inum,data);
-#endif
             } else {
                 pair.first = 0;
                 pair.second.first = 0;
                 pair.second.second = "";
                 checkpoint_pair_vec.template emplace_back(pair);
-#ifdef DEBUG
-                printf("type: %d , size : %d  inum %d data : %s\n", type, size,  inum,data);
-#endif
             }
 
 
