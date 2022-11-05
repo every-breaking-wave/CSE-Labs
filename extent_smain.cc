@@ -13,7 +13,7 @@ main(int argc, char *argv[])
   int count = 0;
 
   if(argc != 2){
-    fprintf(stderr, "Usage: %s port\n", argv[0]):
+    fprintf(stderr, "Usage: %s port\n", argv[0]);
     exit(1);
   }
 

@@ -155,7 +155,7 @@ chfs_client::setattr(inum ino, size_t size) {
     // begin a new tx
     uint64_t tx_id;
     ec->begin(tx_id);
-
+    lc->acquire(ino);
     if (ec->get(ino, buf) != extent_protocol::OK) {
         r = IOERR;
         goto release;
@@ -166,6 +166,7 @@ chfs_client::setattr(inum ino, size_t size) {
     }
     ec->commit(tx_id);
     release:
+    lc->release(ino);
     return r;
 }
 
@@ -181,11 +182,14 @@ chfs_client::create(inum parent, const char *name, mode_t mode, inum &ino_out) {
      */
     std::string buf, append_str;
     bool if_exist;
-
-    chfs_command log;
+    lc->acquire(parent);
 
     // 判断改文件名是否已经存在
     if (lookup(parent, name, if_exist, ino_out) != OK) {
+        r = IOERR;
+        goto release;
+    }
+    if(if_exist){
         r = EXIST;
         goto release;
     }
@@ -211,8 +215,8 @@ chfs_client::create(inum parent, const char *name, mode_t mode, inum &ino_out) {
         r = IOERR;
     }
     ec->commit(tx_id);
-
     release:
+    lc->release(parent);
     return r;
 }
 
@@ -233,6 +237,7 @@ chfs_client::mkdir(inum parent, const char *name, mode_t mode, inum &ino_out) {
     // begin a new tx
     uint64_t tx_id;
     ec->begin(tx_id);
+    lc->acquire(parent);
     // 判断改文件名是否已经存在
     if (lookup(parent, name, if_exist, ino_out) != OK) {
         r = EXIST;
@@ -256,8 +261,8 @@ chfs_client::mkdir(inum parent, const char *name, mode_t mode, inum &ino_out) {
     }
 
     ec->commit(tx_id);
-
     release:
+    lc->release(parent);
     return r;
 }
 
@@ -375,6 +380,7 @@ chfs_client::write(inum ino, size_t size, off_t off, const char *data,
     // begin a new tx
     uint64_t tx_id;
     ec->begin(tx_id);
+    lc->acquire(ino);
     if (ec->get(ino, originData) != extent_protocol::OK) {
         r = IOERR;
         goto release;
@@ -389,6 +395,7 @@ chfs_client::write(inum ino, size_t size, off_t off, const char *data,
     }
     ec->commit(tx_id);
     release:
+    lc->release(ino);
     return r;
 }
 
@@ -409,29 +416,32 @@ int chfs_client::unlink(inum parent,const char *name)
     inum inum;
     // begin a new tx
     uint64_t tx_id;
+    std::string buf;
     ec->begin(tx_id);
-
+    lc->acquire(parent);
     lookup(parent, name, found, inum);
+    int erase_start, erase_after = 0;
 
     // can't unlink directory
     if(isdir(inum)) {
-        return r;
+        goto release;
     }
 
     ec->remove(inum);
 
-    std::string buf;
     if(ec->get(parent, buf) != extent_protocol::OK){
         r = IOERR;
-        return r;
+        goto release;
     }
-    int erase_start = buf.find(name);
-    int erase_after = buf.find('&', erase_start);
+    erase_start = buf.find(name);
+    erase_after = buf.find('&', erase_start);
     buf.erase(erase_start, erase_after - erase_start + 1);
     if(ec->put(parent, buf) != extent_protocol::OK) {
         r = IOERR;
     }
     ec->commit(tx_id);
+    release:
+    lc->release(parent);
     return r;
 
 }
@@ -444,6 +454,8 @@ int chfs_client::link(inum parent, const char *name, const char* link_path, inum
     // begin a new tx
     uint64_t tx_id;
     ec->begin(tx_id);
+    lc->acquire(parent);
+
     lookup(parent, name, found, inum);
     std::string buf, append_str;
 
@@ -473,8 +485,8 @@ int chfs_client::link(inum parent, const char *name, const char* link_path, inum
         r = IOERR;
     }
     ec->commit(tx_id);
-
     release:
+    lc->release(parent);
     return r;
 }
 

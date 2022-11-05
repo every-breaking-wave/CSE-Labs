@@ -10,6 +10,7 @@
 class extent_client {
  private:
   rpcc *cl;
+//  extent_server * es;
 
  public:
   extent_client(std::string dst);
