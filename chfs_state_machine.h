@@ -1,6 +1,7 @@
 #include "raft_state_machine.h"
 #include "rpc.h"
 #include "extent_server.h"
+#include <assert.h>
 
 class chfs_command_raft : public raft_command {
 public:
@@ -71,4 +72,5 @@ private:
     std::mutex mtx;
     // Lab3: Your code here
     // You can add your own variables and functions here if you want.
+
 };

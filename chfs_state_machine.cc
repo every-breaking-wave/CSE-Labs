@@ -1,7 +1,12 @@
 #include "chfs_state_machine.h"
-
+#include<bits/stdc++.h> 
 chfs_command_raft::chfs_command_raft() {
     // Lab3: Your code here
+    this->cmd_tp = CMD_NONE;
+    this->type = 0;
+    this->id = 0;
+    this->buf = "";
+    this->res = nullptr;
 }
 
 chfs_command_raft::chfs_command_raft(const chfs_command_raft &cmd) :
@@ -14,33 +19,60 @@ chfs_command_raft::~chfs_command_raft() {
 
 int chfs_command_raft::size() const{ 
     // Lab3: Your code here
-    return 0;
+    return sizeof(command_type) + sizeof(type) + sizeof(id) + sizeof(uint32_t) + buf.size();
 }
 
 void chfs_command_raft::serialize(char *buf_out, int size) const {
     // Lab3: Your code here
+    assert(size == this->size());
+    int pos = 0;
+    memcpy(buf_out + pos, (char *) &cmd_tp, sizeof(command_type)); // serialize command_type
+    pos += sizeof(command_type);
+    memcpy(buf_out + pos, (char * &type, sizeof(type)));  // serialize type
+    pos += sizeof(uint32_t);   
+    memcpy(buf_out + pos, (char *) &id, sizeof(id));  // serialize id
+    pos += sizeof(id);
+    memcpy(buf_out + pos, (char *) &(buf.size()), sizeof(uint32_t)); // serialize buf size
+    pos += sizeof(uint32_t);
+    memcpy(buf_out + pos, buf.c_str(), buf.size());  // serialize buf
     return;
 }
 
 void chfs_command_raft::deserialize(const char *buf_in, int size) {
     // Lab3: Your code here
+    int buf_size = 0;
+    int pos = 0;
+
+    memcpy((char *) &cmd_tp, buf + pos, sizeof(command_type));// deserialize command_type
+    pos += sizeof(command_type);
+    memcpy((char *) &type, buf + pos, sizeof(type));  // deserialize type
+    pos += sizeof(type);
+    memcpy((char *) &id, buf + pos, sizeof(id));  // deserialize id
+    pos += sizeof(id);
+    memcpy((char *) &buf_size, buf + pos, sizeof(uint32_t));  // deserialize buf size
+    pos += uint32_t;
+    value = std::string(buf + pos, buf_size);  // deserialize buf
     return;
 }
 
 marshall &operator<<(marshall &m, const chfs_command_raft &cmd) {
     // Lab3: Your code here
+    m << (int)cmd.cmd_tp << cmd.type << cmd.id << cmd.buf;
     return m;
 }
 
 unmarshall &operator>>(unmarshall &u, chfs_command_raft &cmd) {
     // Lab3: Your code here
+    int cmd_tp;
+    u >> cmd_tp >> cmd.type >> cmd.id >> cmd.buf;
+    cmd.cmd_tp = chfs_command_raft::command_type(cmd_tp);
     return u;
 }
 
 void chfs_state_machine::apply_log(raft_command &cmd) {
     chfs_command_raft &chfs_cmd = dynamic_cast<chfs_command_raft &>(cmd);
     // Lab3: Your code here
-
+    
     chfs_cmd.res->cv.notify_all();
     return;
 }

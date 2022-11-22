@@ -10,45 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="[lab3] begin lab3g">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chfs_client.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chfs_client.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chfs_state_machine.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chfs_state_machine.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_client.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_client.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_sdist_main.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_sdist_main.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_server.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_server.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_server_dist.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extent_server_dist.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fuse.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fuse.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gettime.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gettime.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inode_manager.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inode_manager.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft_protocol.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft_protocol.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft_test.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft_test_utils.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft_test_utils.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/connection.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/connection.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/jsl_log.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/jsl_log.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/pollmgr.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/pollmgr.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/rpc.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/rpc.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/thr_pool.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/thr_pool.o" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-lab3-part5-b.d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-lab3-part5-b.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/CSE-Labs.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +60,8 @@
       <updated>1669091864377</updated>
       <workItem from="1669091866867" duration="501000" />
       <workItem from="1669095175384" duration="157000" />
-      <workItem from="1669095350235" duration="3000" />
+      <workItem from="1669095350235" duration="471000" />
+      <workItem from="1669096598328" duration="14000" />
     </task>
     <task id="LOCAL-00001" summary="[lab3] begin lab3g">
       <created>1669092090309</created>
@@ -105,7 +70,21 @@
       <option name="project" value="LOCAL" />
       <updated>1669092090309</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="[lab3] begin lab3g">
+      <created>1669095452260</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669095452260</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[lab3] begin lab3g">
+      <created>1669095571853</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669095571853</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
