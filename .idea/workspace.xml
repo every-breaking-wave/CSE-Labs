@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="[lab3] begin lab3g">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chfs_client.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chfs_client.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chfs_state_machine.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chfs_state_machine.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_client.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_client.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_sdist_main.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_sdist_main.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_server.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_server.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_server_dist.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extent_server_dist.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fuse.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fuse.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gettime.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gettime.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inode_manager.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inode_manager.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/raft_protocol.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/raft_protocol.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/raft_test.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/raft_test_utils.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/raft_test_utils.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/connection.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/connection.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/jsl_log.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/jsl_log.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/pollmgr.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/pollmgr.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/rpc.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/rpc.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/thr_pool.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/thr_pool.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-lab3-part5-b.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-lab3-part5-b.o" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MakefileLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Ht67Guzu3yYBMk1RIzdHhwg73G" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="" />
+      <created>1669091864377</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1669091864377</updated>
+      <workItem from="1669091866867" duration="501000" />
+      <workItem from="1669095175384" duration="157000" />
+      <workItem from="1669095350235" duration="3000" />
+    </task>
+    <task id="LOCAL-00001" summary="[lab3] begin lab3g">
+      <created>1669092090309</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669092090309</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[lab3] begin lab3g" />
+    <option name="LAST_COMMIT_MESSAGE" value="[lab3] begin lab3g" />
+  </component>
+</project>

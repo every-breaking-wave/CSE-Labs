@@ -1,0 +1,21 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "cmake.configureOnOpen": true,
+    "window.zoomLevel":1,
+    "editor.minimap.enabled": true,
+    "C_Cpp.autocomplete": "Default",
+    "[cpp]": {
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
+    "[c]": {
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    }
+}
