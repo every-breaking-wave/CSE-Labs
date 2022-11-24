@@ -10,9 +10,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="[lab3] begin lab3g">
-      <change beforePath="$PROJECT_DIR$/.idea/CSE-Labs.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client.d" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.d" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.h" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.o" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_client.d" beforeDir="false" afterPath="$PROJECT_DIR$/extent_client.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_sdist_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/extent_sdist_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_sdist_main.o" beforeDir="false" afterPath="$PROJECT_DIR$/extent_sdist_main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server.d" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist.d" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist.o" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fuse.d" beforeDir="false" afterPath="$PROJECT_DIR$/fuse.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gettime.d" beforeDir="false" afterPath="$PROJECT_DIR$/gettime.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inode_manager.d" beforeDir="false" afterPath="$PROJECT_DIR$/inode_manager.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inode_manager.o" beforeDir="false" afterPath="$PROJECT_DIR$/inode_manager.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_storage.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_storage.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/connection.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/connection.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/jsl_log.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/jsl_log.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/librpc.a" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/librpc.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/pollmgr.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/pollmgr.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/rpc.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/rpc.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/thr_pool.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/thr_pool.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5-b" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b.d" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5-b.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b.o" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5-b.o" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +63,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="5d5b31cf-6098-4f5f-bca8-c1cb425d2310" />
+        <option name="url" value="git@github.com:every-breaking-wave/CSE-Labs.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MakefileLocalSettings">
     <option name="projectSyncType">
@@ -40,15 +87,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="cf.first.check.clang-format" value="false" />
-    <property name="cidr.known.project.marker" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="nodejs_package_manager_path" value="npm" />
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="%.o" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/GNUmakefile" target="%.o" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile Target.%.o" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -62,6 +123,11 @@
       <workItem from="1669095175384" duration="157000" />
       <workItem from="1669095350235" duration="471000" />
       <workItem from="1669096598328" duration="14000" />
+      <workItem from="1669097211395" duration="19382000" />
+      <workItem from="1669122705509" duration="5939000" />
+      <workItem from="1669132957600" duration="12700000" />
+      <workItem from="1669167495764" duration="1730000" />
+      <workItem from="1669296372715" duration="1088000" />
     </task>
     <task id="LOCAL-00001" summary="[lab3] begin lab3g">
       <created>1669092090309</created>

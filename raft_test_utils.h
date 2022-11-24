@@ -169,7 +169,7 @@ public:
 template <typename state_machine, typename command>
 raft_group<state_machine, command>::raft_group(int num,
                                                const char *storage_dir) {
-    // printf("raft_group created begin\n");
+     printf("raft_group created begin\n");
     nodes.resize(num, nullptr);
     servers = create_random_rpc_servers(num);
     clients.resize(num);
@@ -377,6 +377,7 @@ int raft_group<state_machine, command>::append_new_command(
         if (committed_server >= expected_servers) {
           // The log is committed!
           int commited_value = get_committed_value(log_idx);
+          std::cout<<"committed value "<<commited_value<<"  value "<<value<<std::endl;
           if (commited_value == value)
             return log_idx; // and the log is what we want!
         }

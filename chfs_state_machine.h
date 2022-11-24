@@ -24,6 +24,14 @@ public:
         bool done;
         std::mutex mtx;             // protect the struct
         std::condition_variable cv; // notify the caller
+
+        void set_attr(uint32_t type, uint32_t size, time_t ct, time_t at, time_t mt){
+            attr.mtime = mt;
+            attr.ctime = ct;
+            attr.atime = at;
+            attr.type = type;
+            attr.size = size;
+        }
     };
     // Lab3: your code here
     // You may add your own member variables if you need

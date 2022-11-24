@@ -351,7 +351,7 @@ chfs_client::write(inum ino, size_t size, off_t off, const char *data,
         r = IOERR;
         goto release;
     }
-    originData.resize(max(originData.size(), off + size));
+    originData.resize(std::max(originData.size(), off + size));
     for (int i = 0; i < size; ++i) {
         originData[off + i] = data[i];
     }

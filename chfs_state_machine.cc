@@ -26,13 +26,14 @@ void chfs_command_raft::serialize(char *buf_out, int size) const {
     // Lab3: Your code here
     assert(size == this->size());
     int pos = 0;
+    int buf_size = buf.size();
     memcpy(buf_out + pos, (char *) &cmd_tp, sizeof(command_type)); // serialize command_type
     pos += sizeof(command_type);
-    memcpy(buf_out + pos, (char * &type, sizeof(type)));  // serialize type
+    memcpy(buf_out + pos, (char *) &type, sizeof(type));  // serialize type
     pos += sizeof(uint32_t);   
     memcpy(buf_out + pos, (char *) &id, sizeof(id));  // serialize id
     pos += sizeof(id);
-    memcpy(buf_out + pos, (char *) &(buf.size()), sizeof(uint32_t)); // serialize buf size
+    memcpy(buf_out + pos, (char *) &(buf_size), sizeof(uint32_t)); // serialize buf size
     pos += sizeof(uint32_t);
     memcpy(buf_out + pos, buf.c_str(), buf.size());  // serialize buf
     return;
@@ -43,15 +44,15 @@ void chfs_command_raft::deserialize(const char *buf_in, int size) {
     int buf_size = 0;
     int pos = 0;
 
-    memcpy((char *) &cmd_tp, buf + pos, sizeof(command_type));// deserialize command_type
+    memcpy((char *) &cmd_tp, buf_in + pos, sizeof(command_type));// deserialize command_type
     pos += sizeof(command_type);
-    memcpy((char *) &type, buf + pos, sizeof(type));  // deserialize type
+    memcpy((char *) &type, buf_in + pos, sizeof(type));  // deserialize type
     pos += sizeof(type);
-    memcpy((char *) &id, buf + pos, sizeof(id));  // deserialize id
+    memcpy((char *) &id, buf_in + pos, sizeof(id));  // deserialize id
     pos += sizeof(id);
-    memcpy((char *) &buf_size, buf + pos, sizeof(uint32_t));  // deserialize buf size
-    pos += uint32_t;
-    value = std::string(buf + pos, buf_size);  // deserialize buf
+    memcpy((char *) &buf_size, buf_in + pos, sizeof(uint32_t));  // deserialize buf size
+    pos += sizeof (uint32_t);
+    buf = std::string(buf_in + pos, buf_size);  // deserialize buf
     return;
 }
 
@@ -72,7 +73,69 @@ unmarshall &operator>>(unmarshall &u, chfs_command_raft &cmd) {
 void chfs_state_machine::apply_log(raft_command &cmd) {
     chfs_command_raft &chfs_cmd = dynamic_cast<chfs_command_raft &>(cmd);
     // Lab3: Your code here
-    
+    // add lock
+    std::unique_lock<std::mutex> lock(chfs_cmd.res->mtx);
+    chfs_cmd.res->start = std::chrono::system_clock::now();
+    switch (chfs_cmd.cmd_tp) {
+        case chfs_command_raft::CMD_NONE:{
+            chfs_cmd.res->done = true;
+            chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            break;
+        }
+        case chfs_command_raft::CMD_GET:{
+            mtx.lock();
+            es.get(chfs_cmd.id, chfs_cmd.res->buf);
+            chfs_cmd.res->id  = chfs_cmd.id;
+            chfs_cmd.res->buf = chfs_cmd.buf;
+            chfs_cmd.res->done = chfs_cmd.res->buf.size() > 0;
+            chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            mtx.unlock();
+            break;
+        }
+
+        case chfs_command_raft::CMD_GETA:{
+            mtx.lock();
+            es.getattr(chfs_cmd.id, chfs_cmd.res->attr);
+            chfs_cmd.res->id  = chfs_cmd.id;
+            chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            chfs_cmd.res->done = chfs_cmd.res->attr.type > 0;
+            mtx.unlock();
+            break;
+        }
+
+        case chfs_command_raft::CMD_PUT:{
+            int status =  0;
+            es.put(chfs_cmd.id, chfs_cmd.buf, status);
+            mtx.lock();
+            chfs_cmd.res->id  = chfs_cmd.id;
+            chfs_cmd.res->buf = chfs_cmd.buf;
+            chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            chfs_cmd.res->done = chfs_cmd.res->buf.size() > 0;
+            mtx.unlock();
+            break;
+        }
+
+        case chfs_command_raft::CMD_CRT:{
+            es.create(chfs_cmd.type, chfs_cmd.id);
+            mtx.lock();
+            chfs_cmd.res->id  = chfs_cmd.id;
+            chfs_cmd.res->done = chfs_cmd.res->id > 0;
+            chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            mtx.unlock();
+            break;
+        }
+
+        case chfs_command_raft::CMD_RMV:{
+            int status = 0;
+            es.remove(chfs_cmd.id, status);
+            mtx.lock();
+            chfs_cmd.res->id  = chfs_cmd.id;
+            chfs_cmd.res->done = status > 0;
+            chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            mtx.unlock();
+        }
+    }
+
     chfs_cmd.res->cv.notify_all();
     return;
 }
