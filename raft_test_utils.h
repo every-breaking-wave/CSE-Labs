@@ -37,6 +37,8 @@
           #part, #name, new test_case_##part##_##name##_ut(msg));              \
   void test_case_##part##_##name##_ut::body()
 
+//#define DEBUG
+
 class unit_test_case {
 public:
   virtual void body() = 0;
@@ -332,14 +334,23 @@ int raft_group<state_machine, command>::num_committed(int log_idx) {
 
 template <typename state_machine, typename command>
 int raft_group<state_machine, command>::get_committed_value(int log_idx) {
+//    printf("get committed value by log idx %d\n", log_idx);
   for (size_t i = 0; i < nodes.size(); i++) {
     list_state_machine *state = states[i];
     int log_value;
     {
       std::unique_lock<std::mutex> lock(state->mtx);
       if ((int)state->store.size() > log_idx) {
+#ifdef DEBUG
+          std::cout<<"print state info"<<std::endl;
+          for (int j = 0; j < state->store.size(); ++j) {
+              std::cout<<state->store[j]<<" ";
+          }
+          std::cout<<std::endl;
+#endif
         log_value = state->store[log_idx];
-        return log_value;
+//          printf("get committed value by log idx %d\n", log_idx);
+          return log_value;
       }
     }
   }
@@ -363,6 +374,7 @@ int raft_group<state_machine, command>::append_new_command(
 
       int temp_idx, temp_term;
       bool is_leader = nodes[leader_idx]->new_command(cmd, temp_term, temp_idx);
+        printf("node %d new command , is leader %d, term %d idx %d \n", leader_idx, is_leader, temp_term, temp_idx);
       if (is_leader) {
         log_idx = temp_idx;
         break;
@@ -377,7 +389,7 @@ int raft_group<state_machine, command>::append_new_command(
         if (committed_server >= expected_servers) {
           // The log is committed!
           int commited_value = get_committed_value(log_idx);
-          std::cout<<"committed value "<<commited_value<<"  value "<<value<<std::endl;
+//          std::cout<<"committed value "<<commited_value<<"  value "<<value<<std::endl;
           if (commited_value == value)
             return log_idx; // and the log is what we want!
         }

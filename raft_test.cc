@@ -63,7 +63,7 @@ TEST_CASE(part1, re_election, "Election after network failure") {
     group->enable_node(leader1);
     mssleep(1000);
     group->check_exact_one_leader();
-
+    printf("pass");
     delete group;
 }
 
@@ -79,6 +79,7 @@ TEST_CASE(part2, basic_agree, "Basic Agreement") {
         int log_idx = group->append_new_command(i * 100, num_nodes);
         ASSERT(log_idx == i, "got index " << log_idx << ", but expect " << i);
     }
+    printf("pass 1\n\n\n\n\n");
 
     delete group;
 }

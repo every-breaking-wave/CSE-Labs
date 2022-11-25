@@ -54,7 +54,7 @@ public:
     command cmd;
     int term;
 
-    log_entry() = default;
+    log_entry(): term(0){}
 
     log_entry(command cmd, int term) : term(term), cmd(cmd) {}
 };

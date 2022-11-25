@@ -16,6 +16,8 @@ public:
     int vote_for;
     std::vector<log_entry<command>> logs;
 
+    void flush();
+    void update(int new_term, int vote_for_);
 private:
     std::mutex mtx;
     // Lab3: Your code here
@@ -35,5 +37,15 @@ template <typename command>
 raft_storage<command>::~raft_storage() {
     // Lab3: Your code here
 }
+template<typename command>
+void raft_storage<command>::update(int new_term, int vote_for_) {
+    current_term = new_term;
+    vote_for = vote_for_;
+    flush();
+}
 
+template<typename command>
+void raft_storage<command>::flush() {
+
+}
 #endif // raft_storage_h
