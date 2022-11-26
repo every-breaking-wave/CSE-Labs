@@ -75,12 +75,9 @@ TEST_CASE(part2, basic_agree, "Basic Agreement") {
     for (int i = 1; i < 1 + iters; i++) {
         int num_commited = group->num_committed(i);
         ASSERT(num_commited == 0, "The log " << i << " should not be committed!");
-
         int log_idx = group->append_new_command(i * 100, num_nodes);
         ASSERT(log_idx == i, "got index " << log_idx << ", but expect " << i);
     }
-    printf("pass 1\n\n\n\n\n");
-
     delete group;
 }
 
@@ -91,6 +88,9 @@ TEST_CASE(part2, fail_agree, "Fail Agreement") {
     group->append_new_command(101, num_nodes);
     int leader = group->check_exact_one_leader();
     group->disable_node(leader);
+#ifdef DEBUG
+    printf("disable leader %d", leader);
+#endif
 
     group->append_new_command(102, num_nodes - 1);
     group->append_new_command(103, num_nodes - 1);
@@ -99,7 +99,9 @@ TEST_CASE(part2, fail_agree, "Fail Agreement") {
     group->append_new_command(105, num_nodes - 1);
 
     group->enable_node(leader);
-
+#ifdef DEBUG
+    printf("enable leader %d", leader);
+#endif
     group->append_new_command(106, num_nodes);
     mssleep(1000);
     group->append_new_command(107, num_nodes);

@@ -35,14 +35,14 @@ class raft {
     do {                       \
     } while (0);
 
-//#define RAFT_LOG(fmt, args...)                                                                                   \
-//     do {                                                                                                         \
-//         auto now =                                                                                               \
-//             std::chrono::duration_cast<std::chrono::milliseconds>(                                               \
-//                 std::chrono::system_clock::now().time_since_epoch())                                             \
-//                 .count();                                                                                        \
-//         printf("[%ld][%s:%d][node %d term %d role %d] " fmt "\n", now, __FILE__, __LINE__, my_id, current_term, role,  ##args); \
-//     } while (0);
+#define RAFT_LOG(fmt, args...)                                                                                   \
+     do {                                                                                                         \
+         auto now =                                                                                               \
+             std::chrono::duration_cast<std::chrono::milliseconds>(                                               \
+                 std::chrono::system_clock::now().time_since_epoch())                                             \
+                 .count();                                                                                        \
+         printf("[%ld][%s:%d][node %d term %d role %d] " fmt "\n", now, __FILE__, __LINE__, my_id, current_term, role,  ##args); \
+     } while (0);
 
 public:
     raft(
@@ -121,23 +121,23 @@ private:
     // Your code here:
     void set_role(raft_role role_, int new_term) {
         std::string str[3] = {"follower", "candidate", "leader"};
-        if(role != role_){
+        if (role != role_) {
             RAFT_LOG("from %s to %s", str[role].c_str(), str[role_].c_str())
         }
         switch (role_) {
-            case leader:{
+            case leader: {
                 next_idx = std::vector<int>(num_nodes(), storage->logs.size() + 1);
                 match_idx = std::vector<int>(num_nodes(), 0);
                 break;
             }
-            case follower:{
+            case follower: {
                 current_term = new_term;
                 set_vote_for(-1);
                 vote_for_me.clear();
                 last_received_heartbeat_time = std::chrono::system_clock::now();
                 break;
             }
-            case candidate:{
+            case candidate: {
                 vote_for = my_id;
                 vote_for_me.clear();
                 current_term = new_term;
@@ -313,7 +313,7 @@ bool raft<state_machine, command>::new_command(command cmd, int &term, int &inde
     log_entry<command> entry(cmd, current_term);
     storage->logs.template emplace_back(entry);
     match_idx[my_id] = storage->logs.size();
-    index = (int)storage->logs.size() -1 ;
+    index = (int) storage->logs.size();
     mtx.unlock();
     RAFT_LOG("leader %d append a new log, index is %d, value %d", my_id, index, cmd.value)
     return true;
@@ -343,12 +343,12 @@ int raft<state_machine, command>::request_vote(request_vote_args args, request_v
         return 0;
     }
     if (args.term > current_term && role != follower) {
-            set_role(follower, args.term);
+        set_role(follower, args.term);
     }
     if (vote_for == -1 || vote_for == args.candidate_id) {
         int last_log_index = storage->logs.size();
         int last_log_term = get_log_term(last_log_index);
-        if(last_log_term < args.term || last_log_term == args.last_log_term &&  last_log_index <= args.last_log_index){
+        if (last_log_term < args.term || last_log_term == args.last_log_term && last_log_index <= args.last_log_index) {
             RAFT_LOG("node %d vote for node %d", my_id, args.candidate_id);
             reply.vote_granted = true;
             vote_for = args.candidate_id;
@@ -394,45 +394,41 @@ int raft<state_machine, command>::append_entries(append_entries_args<command> ar
     mtx.lock();
     // message is unknown
     if (arg.term < current_term) {
-//        RAFT_LOG("case 0")
         mtx.unlock();
         return 0;
     }
     last_received_heartbeat_time = std::chrono::system_clock::now();  // update heartbeat time
     // append to leader itself
     if (arg.leader_id == my_id) {
-//        RAFT_LOG("case 1")
         reply.success = true;
         mtx.unlock();
         return 0;
     }
     // receive an append request with higher term
     if (arg.term > current_term) {
-//        RAFT_LOG("case 2")
         set_role(follower, arg.term);
         // update storage
         storage->update(arg.term, -1);
     }
     // logs not consistent, can't append
-    if (arg.prev_log_index > storage->logs.size() - 1) {
-//        RAFT_LOG("case 3")
-        mtx.unlock();
-        return 0;
-    }
-    if(arg.entries.empty()){
+//    if (arg.prev_log_index > storage->logs.size() - 1) {
+//        mtx.unlock();
+//        return 0;
+//    }
+    if (arg.entries.empty()) {
         set_role(follower, arg.term);
+        RAFT_LOG("receive heart beat pre log index %d prev log term %d", arg.prev_log_index, arg.prev_log_term)
     }
     if (check_append(arg.prev_log_index, arg.prev_log_term)) {
-//        RAFT_LOG("check append ok")
+        RAFT_LOG("check append ok")
         storage->logs.erase(storage->logs.begin() + arg.prev_log_index, storage->logs.end());
         storage->logs.insert(storage->logs.end(), arg.entries.begin(), arg.entries.end());
-//        RAFT_LOG("commit id %d  leader commit %d", commit_idx, arg.leader_commit);
+        RAFT_LOG("commit id %d  leader commit %d", commit_idx, arg.leader_commit);
         if (arg.leader_commit > commit_idx) {
             commit_idx = arg.leader_commit > commit_idx ? storage->logs.size() : commit_idx;
-//            RAFT_LOG("node %d change commit idx to %d", my_id, commit_idx);
+            RAFT_LOG("node %d change commit idx to %d", my_id, commit_idx);
         }
     }   // not able to append
-//    RAFT_LOG("case 5")
     reply.success = true;
     mtx.unlock();
     return 0;
@@ -457,11 +453,13 @@ void raft<state_machine, command>::handle_append_entries_reply(int node, const a
             storage->vote_for = -1;
             storage->flush();
             last_received_heartbeat_time = std::chrono::system_clock::now();
+        } else if (next_idx[node] > 1) {
+            next_idx[node]--;
         }
     } else {
         match_idx[node] = arg.prev_log_index + arg.entries.size();
         next_idx[node] = match_idx[node] + 1;
-//        RAFT_LOG("current match_idx %d", match_idx[node])
+        RAFT_LOG("current node %d match_idx %d", node, match_idx[node])
         update_commit_idx_after_get_reply();
 //        RAFT_LOG("node %d append successfully until log[%d], current commit idx %d", node, match_idx[node], commit_idx);
     }
@@ -533,8 +531,8 @@ void raft<state_machine, command>::run_background_election() {
                     std::chrono::system_clock::now() - last_received_heartbeat_time).count();
             int random_time = 200 + rand() % 300;
             if (time >= random_time) {  // no legal leader, follower starts election
-                RAFT_LOG("node %d start election, time: %d, last_receive_time: %ld", my_id, time,
-                         last_received_heartbeat_time);
+//                RAFT_LOG("node %d start election, time: %d, last_receive_time: %ld", my_id, time,
+//                         last_received_heartbeat_time);
                 // RAFT_LOG("%d have log[%ld], last_log_term = %d", my_id, storage->logs.size() - 1, storage->logs[storage->logs.size() - 1].term);
                 set_role(candidate, current_term + 1);
                 request_vote_args args;
@@ -553,7 +551,7 @@ void raft<state_machine, command>::run_background_election() {
             int time = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::system_clock::now() - last_received_heartbeat_time).count();
             if (time >= election_timeout) { // election failed
-                RAFT_LOG("node %d quit elect", my_id);
+//                RAFT_LOG("node %d quit elect", my_id);
                 set_role(follower, current_term);
             }
         }
@@ -578,10 +576,11 @@ void raft<state_machine, command>::run_background_commit() {
         }
         mtx.lock();
         for (int i = 0; i < rpc_clients.size(); ++i) {
-            if(i == my_id){
+            if (i == my_id) {
                 continue;
             }
-            if ((storage->logs.size() < next_idx[i] && (storage->logs.size() - 1) < match_idx[i]) || !storage->logs.size()) {
+            if ((storage->logs.size() < next_idx[i] && (storage->logs.size() - 1) < match_idx[i]) ||
+                !storage->logs.size()) {
                 continue;
             }
             int prev_log_index = next_idx[i] - 1;
@@ -589,8 +588,8 @@ void raft<state_machine, command>::run_background_commit() {
                     storage->logs.begin() + prev_log_index, storage->logs.end());
             append_entries_args<command> args(current_term, my_id, prev_log_index, get_log_term(prev_log_index),
                                               commit_idx, entries);
-            RAFT_LOG("leader %d send commit to node %d, prev_log_index %d prev_log_term %d, commit idx %d",
-                     my_id, i, prev_log_index, get_log_term(prev_log_index), commit_idx);
+//            RAFT_LOG("end commit to node %d, prev_log_index %d prev_log_term %d, next_idx %d match idx %d commit idx %d log size %d ",
+//                     i, prev_log_index, get_log_term(prev_log_index), next_idx[i], match_idx[i], commit_idx, storage->logs.size());
             if (!thread_pool->addObjJob(this, &raft::send_append_entries, i, args)) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
@@ -612,6 +611,7 @@ void raft<state_machine, command>::run_background_apply() {
         while (commit_idx > last_applied) {
 //            RAFT_LOG("node %d should apply log, last applied: %d, commit_idx, %d", my_id, last_applied, commit_idx)
             state->apply_log(storage->logs[last_applied].cmd);
+            RAFT_LOG("apply new log last_applied %d commit_idx %d", last_applied, commit_idx)
             last_applied++;
         }
         mtx.unlock();
@@ -632,19 +632,14 @@ void raft<state_machine, command>::run_background_ping() {
         if (role == leader) {
 //            RAFT_LOG("leader %d send heartbeat to other nodes", my_id);
             int client_size = rpc_clients.size();
-            int n_idx;
+            int pre_log_index;
             for (int i = 0; i < client_size; ++i) {
-                if(i == my_id){
+                if (i == my_id) {
                     continue;
                 }
-                n_idx = next_idx[i];
-                append_entries_args<command> args;
-                args.term = current_term;
-                args.leader_id = my_id;
-                args.leader_commit = commit_idx;
-                args.prev_log_index = n_idx - 1;
-                args.prev_log_term = get_log_term(n_idx);
-                args.entries.clear();
+                pre_log_index = next_idx[i] - 1;
+                append_entries_args<command> args(current_term, my_id, pre_log_index, get_log_term(pre_log_index),
+                                                  commit_idx, std::vector<log_entry<command>>());
                 RAFT_LOG("send heart beat to node %d", i)
                 // call RPC asym
                 thread_pool->addObjJob(this, &raft::send_append_entries, i, args);
@@ -674,7 +669,7 @@ int raft<state_machine, command>::get_log_term(int index) {
     if (index > storage->logs.size()) {
         return -1;
     }
-    return index == 0 ? 0 : storage->logs[index-1].term;
+    return index == 0 ? 0 : storage->logs[index - 1].term;
 }
 
 template<typename state_machine, typename command>
@@ -690,6 +685,7 @@ void raft<state_machine, command>::update_commit_idx_after_get_reply() {
     std::vector<int> temp = match_idx;
     std::sort(temp.begin(), temp.end());
     commit_idx = temp[temp.size() / 2];
+    RAFT_LOG("new commit idx after get reply %d", commit_idx)
 }
 
 #endif // raft_h
