@@ -248,7 +248,9 @@ TEST_CASE(part2, rejoin, "Rejoin of partitioned leader") {
 
     // leader network failure
     group->disable_node(leader1);
-
+#ifdef DEBUG
+    printf("disable leader %d\n", leader1);
+#endif
     // make old leader try to agree on some entries
     int temp_term, temp_index;
     group->nodes[leader1]->new_command(list_command(102), temp_term, temp_index);
@@ -261,15 +263,21 @@ TEST_CASE(part2, rejoin, "Rejoin of partitioned leader") {
 
     // new leader network failure
     group->disable_node(leader2);
-
+#ifdef DEBUG
+    printf("disable leader %d\n", leader2);
+#endif
     // old leader connected again
     group->enable_node(leader1);
-
+#ifdef DEBUG
+    printf("enable leader %d\n", leader1);
+#endif
     group->append_new_command(104, 2);
 
     // all together now
     group->enable_node(leader2);
-
+#ifdef DEBUG
+    printf("enable leader %d\n", leader2);
+#endif
     group->append_new_command(105, num_nodes);
 
     delete group;

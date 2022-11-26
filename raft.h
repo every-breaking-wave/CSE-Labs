@@ -35,14 +35,14 @@ class raft {
     do {                       \
     } while (0);
 
-#define RAFT_LOG(fmt, args...)                                                                                   \
-     do {                                                                                                         \
-         auto now =                                                                                               \
-             std::chrono::duration_cast<std::chrono::milliseconds>(                                               \
-                 std::chrono::system_clock::now().time_since_epoch())                                             \
-                 .count();                                                                                        \
-         printf("[%ld][%s:%d][node %d term %d role %d] " fmt "\n", now, __FILE__, __LINE__, my_id, current_term, role,  ##args); \
-     } while (0);
+//#define RAFT_LOG(fmt, args...)                                                                                   \
+//     do {                                                                                                         \
+//         auto now =                                                                                               \
+//             std::chrono::duration_cast<std::chrono::milliseconds>(                                               \
+//                 std::chrono::system_clock::now().time_since_epoch())                                             \
+//                 .count();                                                                                        \
+//         printf("[%ld][%s:%d][node %d term %d role %d] " fmt "\n", now, __FILE__, __LINE__, my_id, current_term, role,  ##args); \
+//     } while (0);
 
 public:
     raft(
@@ -305,17 +305,20 @@ template<typename state_machine, typename command>
 bool raft<state_machine, command>::new_command(command cmd, int &term, int &index) {
     // Lab3: Your code here
     mtx.lock();
-    term = current_term;
     if (role != leader) {
         mtx.unlock();
         return false;
     }
+    term = current_term;
     log_entry<command> entry(cmd, current_term);
     storage->logs.template emplace_back(entry);
     match_idx[my_id] = storage->logs.size();
     index = (int) storage->logs.size();
     mtx.unlock();
-    RAFT_LOG("leader %d append a new log, index is %d, value %d", my_id, index, cmd.value)
+    for (int i = 0; i < storage->logs.size(); ++i) {
+        std::cout<<storage->logs[i].cmd.value<<" ";
+    }
+    std::cout<<std::endl;
     return true;
 }
 
@@ -417,19 +420,20 @@ int raft<state_machine, command>::append_entries(append_entries_args<command> ar
 //    }
     if (arg.entries.empty()) {
         set_role(follower, arg.term);
-        RAFT_LOG("receive heart beat pre log index %d prev log term %d", arg.prev_log_index, arg.prev_log_term)
+//        RAFT_LOG("receive heart beat pre log index %d prev log term %d", arg.prev_log_index, arg.prev_log_term)
     }
     if (check_append(arg.prev_log_index, arg.prev_log_term)) {
-        RAFT_LOG("check append ok")
         storage->logs.erase(storage->logs.begin() + arg.prev_log_index, storage->logs.end());
         storage->logs.insert(storage->logs.end(), arg.entries.begin(), arg.entries.end());
-        RAFT_LOG("commit id %d  leader commit %d", commit_idx, arg.leader_commit);
+        if(arg.entries.size()){
+            RAFT_LOG("commit id %d  leader commit %d, current log size %d", commit_idx, arg.leader_commit, storage->logs.size());
+        }
         if (arg.leader_commit > commit_idx) {
             commit_idx = arg.leader_commit > commit_idx ? storage->logs.size() : commit_idx;
             RAFT_LOG("node %d change commit idx to %d", my_id, commit_idx);
         }
+        reply.success = true;
     }   // not able to append
-    reply.success = true;
     mtx.unlock();
     return 0;
 
@@ -579,8 +583,12 @@ void raft<state_machine, command>::run_background_commit() {
             if (i == my_id) {
                 continue;
             }
-            if ((storage->logs.size() < next_idx[i] && (storage->logs.size() - 1) < match_idx[i]) ||
-                !storage->logs.size()) {
+//            if ((storage->logs.size() < next_idx[i] && (storage->logs.size() - 1) < match_idx[i]) ||
+//                !storage->logs.size()) {
+//                continue;
+//            }
+            if(storage->logs.size() < next_idx[i]){
+                RAFT_LOG("node %d next_idx %d",i, next_idx[i])
                 continue;
             }
             int prev_log_index = next_idx[i] - 1;
@@ -595,6 +603,7 @@ void raft<state_machine, command>::run_background_commit() {
             }
         }
         mtx.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
@@ -640,7 +649,7 @@ void raft<state_machine, command>::run_background_ping() {
                 pre_log_index = next_idx[i] - 1;
                 append_entries_args<command> args(current_term, my_id, pre_log_index, get_log_term(pre_log_index),
                                                   commit_idx, std::vector<log_entry<command>>());
-                RAFT_LOG("send heart beat to node %d", i)
+//                RAFT_LOG("send heart beat to node %d", i)
                 // call RPC asym
                 thread_pool->addObjJob(this, &raft::send_append_entries, i, args);
             }

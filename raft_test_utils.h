@@ -373,6 +373,7 @@ int raft_group<state_machine, command>::append_new_command(
         continue;
 
       int temp_idx, temp_term;
+        printf("leader id %d \n", leader_idx);
       bool is_leader = nodes[leader_idx]->new_command(cmd, temp_term, temp_idx);
       if(is_leader){
           printf("node %d new command , is leader %d, term %d idx %d value %d\n",
@@ -389,7 +390,7 @@ int raft_group<state_machine, command>::append_new_command(
       while (std::chrono::system_clock::now() <
              check_start + std::chrono::seconds(2)) {
         int committed_server = num_committed(log_idx);
-        // std::cout << "nun commited: " << committed_server << std::endl;
+//         std::cout << "nun commited: " << committed_server << std::endl;
         if (committed_server >= expected_servers) {
           // The log is committed!
           int commited_value = get_committed_value(log_idx);
