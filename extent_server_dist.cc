@@ -11,6 +11,15 @@ chfs_raft *extent_server_dist::leader() const {
 
 int extent_server_dist::create(uint32_t type, extent_protocol::extentid_t &id) {
     // Lab3: your code here
+    chfs_command_raft cmd;
+    cmd.cmd_tp = chfs_command_raft::CMD_CRT;
+    cmd.type = type;
+    std::unique_lock<std::mutex> lock(cmd.res->mtx);
+    int term, index;
+//    leader()->new_command(cmd, term, index);
+    if(!cmd.res->done){
+        ASSERT(cmd.res->cv.wait_until(lock, 500) == std::cv_status::no_timeout, "extent_server_dist::create command timeout");
+    }
     return extent_protocol::OK;
 }
 

@@ -35,14 +35,14 @@ class raft {
     do {                       \
     } while (0);
 
-//#define RAFT_LOG(fmt, args...)                                                                                   \
-//     do {                                                                                                         \
-//         auto now =                                                                                               \
-//             std::chrono::duration_cast<std::chrono::milliseconds>(                                               \
-//                 std::chrono::system_clock::now().time_since_epoch())                                             \
-//                 .count();                                                                                        \
-//         printf("[%ld][%s:%d][node %d term %d role %d] " fmt "\n", now, __FILE__, __LINE__, my_id, current_term, role,  ##args); \
-//     } while (0);
+#define RAFT_LOG(fmt, args...)                                                                                   \
+     do {                                                                                                         \
+         auto now =                                                                                               \
+             std::chrono::duration_cast<std::chrono::milliseconds>(                                               \
+                 std::chrono::system_clock::now().time_since_epoch())                                             \
+                 .count();                                                                                        \
+         printf("[%ld][%s:%d][node %d term %d role %d] " fmt "\n", now, __FILE__, __LINE__, my_id, current_term, role,  ##args); \
+     } while (0);
 
 public:
     raft(
@@ -146,6 +146,9 @@ private:
                 break;
             }
         }
+        storage->vote_for = vote_for;
+        storage->current_term = current_term;
+        storage->flush();
         role = role_;
     }
 
@@ -239,6 +242,7 @@ raft<state_machine, command>::raft(rpcs *server, std::vector<rpcc *> clients, in
     vote_for_me.clear();
     commit_idx = 0;
     last_applied = 0;
+    current_term = storage->current_term;
     // generate seperately between 300 to 500 randomly
     election_timeout = 300 + (200 / rpc_clients.size()) * my_id;
     last_received_heartbeat_time = std::chrono::system_clock::now();
@@ -312,12 +316,10 @@ bool raft<state_machine, command>::new_command(command cmd, int &term, int &inde
     term = current_term;
     log_entry<command> entry(cmd, current_term);
     storage->logs.template emplace_back(entry);
+    storage->flush();
     match_idx[my_id] = storage->logs.size();
     index = (int) storage->logs.size();
     mtx.unlock();
-    for (int i = 0; i < storage->logs.size(); ++i) {
-        std::cout<<storage->logs[i].cmd.value<<" ";
-    }
     std::cout<<std::endl;
     return true;
 }
@@ -411,7 +413,7 @@ int raft<state_machine, command>::append_entries(append_entries_args<command> ar
     if (arg.term > current_term) {
         set_role(follower, arg.term);
         // update storage
-        storage->update(arg.term, -1);
+//        storage->update(arg.term, -1);
     }
     // logs not consistent, can't append
 //    if (arg.prev_log_index > storage->logs.size() - 1) {
@@ -425,6 +427,7 @@ int raft<state_machine, command>::append_entries(append_entries_args<command> ar
     if (check_append(arg.prev_log_index, arg.prev_log_term)) {
         storage->logs.erase(storage->logs.begin() + arg.prev_log_index, storage->logs.end());
         storage->logs.insert(storage->logs.end(), arg.entries.begin(), arg.entries.end());
+        storage->flush();
         if(arg.entries.size()){
             RAFT_LOG("commit id %d  leader commit %d, current log size %d", commit_idx, arg.leader_commit, storage->logs.size());
         }
@@ -453,9 +456,7 @@ void raft<state_machine, command>::handle_append_entries_reply(int node, const a
         if (reply.term > current_term) {
             set_role(follower, reply.term);
             // update storage
-            storage->current_term = reply.term;
-            storage->vote_for = -1;
-            storage->flush();
+//            storage->update(reply.term, -1);
             last_received_heartbeat_time = std::chrono::system_clock::now();
         } else if (next_idx[node] > 1) {
             next_idx[node]--;
@@ -468,7 +469,7 @@ void raft<state_machine, command>::handle_append_entries_reply(int node, const a
 //        RAFT_LOG("node %d append successfully until log[%d], current commit idx %d", node, match_idx[node], commit_idx);
     }
     mtx.unlock();
-
+    return;
 }
 
 template<typename state_machine, typename command>
@@ -588,7 +589,7 @@ void raft<state_machine, command>::run_background_commit() {
 //                continue;
 //            }
             if(storage->logs.size() < next_idx[i]){
-                RAFT_LOG("node %d next_idx %d",i, next_idx[i])
+//                RAFT_LOG("node %d next_idx %d",i, next_idx[i])
                 continue;
             }
             int prev_log_index = next_idx[i] - 1;
@@ -605,6 +606,7 @@ void raft<state_machine, command>::run_background_commit() {
         mtx.unlock();
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+    return;
 }
 
 template<typename state_machine, typename command>
@@ -620,7 +622,7 @@ void raft<state_machine, command>::run_background_apply() {
         while (commit_idx > last_applied) {
 //            RAFT_LOG("node %d should apply log, last applied: %d, commit_idx, %d", my_id, last_applied, commit_idx)
             state->apply_log(storage->logs[last_applied].cmd);
-            RAFT_LOG("apply new log last_applied %d commit_idx %d", last_applied, commit_idx)
+//            RAFT_LOG("apply new log last_applied %d commit_idx %d", last_applied, commit_idx)
             last_applied++;
         }
         mtx.unlock();
@@ -694,7 +696,7 @@ void raft<state_machine, command>::update_commit_idx_after_get_reply() {
     std::vector<int> temp = match_idx;
     std::sort(temp.begin(), temp.end());
     commit_idx = temp[temp.size() / 2];
-    RAFT_LOG("new commit idx after get reply %d", commit_idx)
+//    RAFT_LOG("new commit idx after get reply %d", commit_idx)
 }
 
 #endif // raft_h

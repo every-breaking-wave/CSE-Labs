@@ -78,8 +78,8 @@ void chfs_state_machine::apply_log(raft_command &cmd) {
     chfs_cmd.res->start = std::chrono::system_clock::now();
     switch (chfs_cmd.cmd_tp) {
         case chfs_command_raft::CMD_NONE:{
-            chfs_cmd.res->done = true;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
+            chfs_cmd.res->done = true;
             break;
         }
         case chfs_command_raft::CMD_GET:{

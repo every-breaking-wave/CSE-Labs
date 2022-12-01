@@ -6,6 +6,11 @@
 #include "extent_protocol.h"
 #include <map>
 #include <string>
+#include <thread>
+#include <condition_variable>
+#include <future>
+#include <iostream>
+#include <mutex>
 #include "raft.h"
 #include "extent_server.h"
 #include "raft_test_utils.h"

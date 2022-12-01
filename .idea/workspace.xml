@@ -10,34 +10,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/chfs_client" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chfs_client" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chfs_client.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chfs_client.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chfs_state_machine.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chfs_state_machine.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_client.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_client.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_sdist_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_sdist_main.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_server.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_server.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_server_dist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_server_dist.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extent_server_dist.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuse.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuse.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grade.sh" beforeDir="false" afterPath="$PROJECT_DIR$/grade.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inode_manager.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/inode_manager.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GNUmakefile" beforeDir="false" afterPath="$PROJECT_DIR$/GNUmakefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client.h" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.h" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_client.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_client.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_client.h" beforeDir="false" afterPath="$PROJECT_DIR$/extent_client.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/extent_protocol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_sdist_main.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_sdist_main.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server.h" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist.h" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_smain.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_smain.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fuse.cc" beforeDir="false" afterPath="$PROJECT_DIR$/fuse.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handle.cc" beforeDir="false" afterPath="$PROJECT_DIR$/handle.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handle.h" beforeDir="false" afterPath="$PROJECT_DIR$/handle.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inode_manager.cc" beforeDir="false" afterPath="$PROJECT_DIR$/inode_manager.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inode_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/inode_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1_tester.cc" beforeDir="false" afterPath="$PROJECT_DIR$/part1_tester.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_state_machine.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_state_machine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_storage.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_storage.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start.sh" beforeDir="false" afterPath="$PROJECT_DIR$/start.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stop.sh" beforeDir="false" afterPath="$PROJECT_DIR$/stop.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-a.pl" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5-a.pl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b.cc" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5-b.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5-b.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab3-part5.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +128,12 @@
       <workItem from="1669373203884" duration="823000" />
       <workItem from="1669374488709" duration="19492000" />
       <workItem from="1669431515763" duration="1000" />
-      <workItem from="1669432224767" duration="16380000" />
+      <workItem from="1669432224767" duration="22194000" />
+      <workItem from="1669455162683" duration="8593000" />
+      <workItem from="1669557793843" duration="816000" />
+      <workItem from="1669770233894" duration="216000" />
+      <workItem from="1669845597603" duration="7000" />
+      <workItem from="1669881453329" duration="4592000" />
     </task>
     <task id="LOCAL-00001" summary="[lab3] begin lab3g">
       <created>1669092090309</created>
@@ -161,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669442327314</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="[lab3] pass part2">
+      <created>1669448867730</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1669448867730</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,6 +206,7 @@
     <MESSAGE value="[lab3] pass part1" />
     <MESSAGE value="[lab3] update part1" />
     <MESSAGE value="[lab3] pass part2-1" />
-    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass part2-1" />
+    <MESSAGE value="[lab3] pass part2" />
+    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass part2" />
   </component>
 </project>

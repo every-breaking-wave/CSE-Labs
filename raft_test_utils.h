@@ -373,13 +373,7 @@ int raft_group<state_machine, command>::append_new_command(
         continue;
 
       int temp_idx, temp_term;
-        printf("leader id %d \n", leader_idx);
       bool is_leader = nodes[leader_idx]->new_command(cmd, temp_term, temp_idx);
-      if(is_leader){
-          printf("node %d new command , is leader %d, term %d idx %d value %d\n",
-                 leader_idx, is_leader, temp_term, temp_idx, cmd.value);
-      }
-
       if (is_leader) {
         log_idx = temp_idx;
         break;
