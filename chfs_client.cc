@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdio.h>
+#include <list>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -11,15 +12,17 @@
 
 //#define DEBUG
 
-//chfs_client::chfs_client() {
-//    ec = new extent_client();
-//}
-chfs_client::chfs_client(std::string extent_dst)
-{
+chfs_client::chfs_client(std::string extent_dst) {
     ec = new extent_client(extent_dst);
     if (ec->put(1, "") != extent_protocol::OK)
         printf("error init root dir\n"); // XYB: init root dir
 }
+
+//chfs_client::chfs_client(std::string extent_dst, std::string lock_dst) {
+//    ec = new extent_client();
+//    if (ec->put(1, "") != extent_protocol::OK)
+//        printf("error init root dir\n"); // XYB: init root dir
+//}
 
 chfs_client::inum
 chfs_client::n2i(std::string n) {
@@ -41,21 +44,15 @@ chfs_client::isfile(inum inum) {
     extent_protocol::attr a;
 
     if (ec->getattr(inum, a) != extent_protocol::OK) {
-        printf("error getting attr\n");
         return false;
     }
-
-    if (a.type == extent_protocol::T_FILE) {
-        printf("isfile: %lld is a file\n", inum);
-        return true;
-    } 
-    printf("isfile: %lld is a dir\n", inum);
-    return false;
+    return a.type == extent_protocol::T_FILE;
 }
+
 /** Your code here for Lab...
  * You may need to add routines such as
  * readlink, issymlink here to implement symbolic link.
- * 
+ *
  * */
 
 bool
@@ -69,8 +66,6 @@ chfs_client::isdir(inum inum) {
     }
     return a.type == extent_protocol::T_DIR;
 }
-
-
 
 bool
 chfs_client::issymlink(inum inum)
@@ -442,4 +437,3 @@ int chfs_client::readlink(inum ino, std::string &data) {
     }
     return r;
 }
-

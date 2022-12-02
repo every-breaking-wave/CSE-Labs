@@ -6,7 +6,7 @@ chfs_command_raft::chfs_command_raft() {
     this->type = 0;
     this->id = 0;
     this->buf = "";
-    this->res = nullptr;
+    this->res = std::make_shared<result>();
 }
 
 chfs_command_raft::chfs_command_raft(const chfs_command_raft &cmd) :
@@ -71,10 +71,11 @@ unmarshall &operator>>(unmarshall &u, chfs_command_raft &cmd) {
 }
 
 void chfs_state_machine::apply_log(raft_command &cmd) {
-    chfs_command_raft &chfs_cmd = dynamic_cast<chfs_command_raft &>(cmd);
+    chfs_command_raft &chfs_cmd = static_cast<chfs_command_raft &>(cmd);
     // Lab3: Your code here
     // add lock
     std::unique_lock<std::mutex> lock(chfs_cmd.res->mtx);
+    mtx.lock();
     chfs_cmd.res->start = std::chrono::system_clock::now();
     switch (chfs_cmd.cmd_tp) {
         case chfs_command_raft::CMD_NONE:{
@@ -83,60 +84,66 @@ void chfs_state_machine::apply_log(raft_command &cmd) {
             break;
         }
         case chfs_command_raft::CMD_GET:{
-            mtx.lock();
+            printf("\nchfs_state_machine: get file , id : %d\n", chfs_cmd.id);
+//            mtx.lock();
             es.get(chfs_cmd.id, chfs_cmd.res->buf);
             chfs_cmd.res->id  = chfs_cmd.id;
-            chfs_cmd.res->buf = chfs_cmd.buf;
+//            chfs_cmd.res->buf = chfs_cmd.buf;
             chfs_cmd.res->done = chfs_cmd.res->buf.size() > 0;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
-            mtx.unlock();
+//            mtx.unlock();
             break;
         }
 
         case chfs_command_raft::CMD_GETA:{
-            mtx.lock();
+            printf("\nchfs_state_machine: get file attr, id : %d\n", chfs_cmd.id);
+//            mtx.lock();
             es.getattr(chfs_cmd.id, chfs_cmd.res->attr);
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
             chfs_cmd.res->done = chfs_cmd.res->attr.type > 0;
-            mtx.unlock();
+//            mtx.unlock();
             break;
         }
 
         case chfs_command_raft::CMD_PUT:{
+            printf("\nchfs_state_machine: create file , type : %d\n", chfs_cmd.type);
             int status =  0;
             es.put(chfs_cmd.id, chfs_cmd.buf, status);
-            mtx.lock();
+//            mtx.lock();
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->buf = chfs_cmd.buf;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
             chfs_cmd.res->done = chfs_cmd.res->buf.size() > 0;
-            mtx.unlock();
+//            mtx.unlock();
             break;
         }
 
         case chfs_command_raft::CMD_CRT:{
+            printf("\nchfs_state_machine: create file , type : %d\n", chfs_cmd.type);
             es.create(chfs_cmd.type, chfs_cmd.id);
-            mtx.lock();
+//            mtx.lock();
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->done = chfs_cmd.res->id > 0;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
-            mtx.unlock();
+//            mtx.unlock();
             break;
         }
 
         case chfs_command_raft::CMD_RMV:{
+            printf("\nchfs_state_machine: create file , type : %d\n", chfs_cmd.type);
             int status = 0;
             es.remove(chfs_cmd.id, status);
-            mtx.lock();
+//            mtx.lock();
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->done = status > 0;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
-            mtx.unlock();
+//            mtx.unlock();
         }
     }
 
     chfs_cmd.res->cv.notify_all();
+    mtx.unlock();
     return;
 }
 
