@@ -56,22 +56,25 @@ public:
     int term;
     command cmd;
 
-    log_entry() : index(0), term(0) {}
-    log_entry(int index, int term) : index(index), term(term) {}
+    log_entry(int index = 0, int term = 0) : index(index), term(term) {}
     log_entry(int index, int term, command cmd) : index(index), term(term), cmd(cmd) {}
 };
 
 template <typename command>
 marshall &operator<<(marshall &m, const log_entry<command> &entry)
 {
-    m << entry.index << entry.term << entry.cmd;
+    m << entry.index;
+    m << entry.term;
+    m << entry.cmd;
     return m;
 }
 
 template <typename command>
 unmarshall &operator>>(unmarshall &u, log_entry<command> &entry)
 {
-    u >> entry.index >> entry.term >> entry.cmd;
+    u >> entry.index;
+    u >> entry.term;
+    u >> entry.cmd;
     return u;
 }
 
@@ -87,20 +90,30 @@ public:
     int leaderCommit;
     append_entries_args()=default;
     append_entries_args(int term_, int leaderId_, int leaderCommit_, int preLogIndex_, int prevLogTerm_, std::vector<log_entry<command>> entries_)
-    : term(term_), leaderId(leaderId_), prevLogIndex(preLogIndex_), leaderCommit(leaderCommit_), prevLogTerm(prevLogTerm_), entries(entries_){}
+            : term(term_), leaderId(leaderId_), prevLogIndex(preLogIndex_), leaderCommit(leaderCommit_), prevLogTerm(prevLogTerm_), entries(entries_){}
 };
 
 template <typename command>
 marshall &operator<<(marshall &m, const append_entries_args<command> &args)
 {
-    m << args.term << args.leaderId << args.prevLogIndex << args.prevLogTerm << args.entries << args.leaderCommit;
+    m << args.term;
+    m << args.leaderId;
+    m << args.prevLogIndex;
+    m << args.prevLogTerm;
+    m << args.entries;
+    m << args.leaderCommit;
     return m;
 }
 
 template <typename command>
 unmarshall &operator>>(unmarshall &u, append_entries_args<command> &args)
 {
-    u >> args.term >> args.leaderId >> args.prevLogIndex >> args.prevLogTerm >> args.entries >> args.leaderCommit;
+    u >> args.term;
+    u >> args.leaderId;
+    u >> args.prevLogIndex;
+    u >> args.prevLogTerm;
+    u >> args.entries;
+    u >> args.leaderCommit;
     return u;
 }
 
@@ -122,9 +135,10 @@ public:
     int lastIncludedIndex;
     int lastIncludedTerm;
     std::vector<char> snapshot;
-//    install_snapshot_args()=default;
-//    install_snapshot_args(int term_, int leaderId_, int lastIncludedIndex_, int lastIncludedTerm_, std::vector<char> snapshot_)
-//    : term(term_), leaderId(leaderId_), lastIncludedIndex(lastIncludedIndex_), lastIncludedTerm(lastIncludedTerm_), snapshot(snapshot_){}
+    install_snapshot_args()=default;
+    install_snapshot_args(int term_, int leaderId_, int lastIncludedIndex_, int lastIncludedTerm_, std::vector<char> snapshot_)
+    : term(term_), leaderId(leaderId_), lastIncludedIndex(lastIncludedIndex_), lastIncludedTerm(lastIncludedTerm_), snapshot(snapshot_){}
+
 };
 
 marshall &operator<<(marshall &m, const install_snapshot_args &args);

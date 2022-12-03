@@ -11,26 +11,16 @@
   <component name="ChangeListManager">
     <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chfs_state_machine.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gettime.d" beforeDir="false" afterPath="$PROJECT_DIR$/gettime.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grade.sh" beforeDir="false" afterPath="$PROJECT_DIR$/grade.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_protocol.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_protocol.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_protocol.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_storage.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_storage.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_test.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_test_utils.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_test_utils.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test_utils.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/connection.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/connection.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/jsl_log.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/jsl_log.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/pollmgr.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/pollmgr.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/rpc.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/rpc.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/thr_pool.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/thr_pool.d" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669899328763</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="[lab3] pass except part4">
+      <created>1670033574920</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670033574920</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,6 +197,7 @@
     <MESSAGE value="[lab3] pass part2-1" />
     <MESSAGE value="[lab3] pass part2" />
     <MESSAGE value="[lab3] pass part3 persisit1" />
-    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass part3 persisit1" />
+    <MESSAGE value="[lab3] pass except part4" />
+    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass except part4" />
   </component>
 </project>

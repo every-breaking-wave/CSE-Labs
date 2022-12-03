@@ -11,7 +11,8 @@ unmarshall& operator>>(unmarshall &u, request_vote_args& args) {
 }
 
 marshall& operator<<(marshall &m, const request_vote_reply& reply) {
-    m << reply.term << reply.voteGranted;
+    m << reply.term;
+    m << reply.voteGranted;
     return m;
 }
 

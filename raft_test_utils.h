@@ -341,15 +341,7 @@ int raft_group<state_machine, command>::get_committed_value(int log_idx) {
     {
       std::unique_lock<std::mutex> lock(state->mtx);
       if ((int)state->store.size() > log_idx) {
-#ifdef DEBUG
-          std::cout<<"print "<< i<< " state info  ";
-          for (int j = 0; j < state->store.size(); ++j) {
-              std::cout<<state->store[j]<<" ";
-          }
-          std::cout<<std::endl;
-#endif
         log_value = state->store[log_idx];
-          printf("get committed value %d by log idx %d\n", log_value, log_idx);
           return log_value;
       }
     }
@@ -389,7 +381,6 @@ int raft_group<state_machine, command>::append_new_command(
           // The log is committed!
           int commited_value = get_committed_value(log_idx);
           if (commited_value == value){
-              printf("got what we want\n");
               return log_idx; // and the log is what we want!
           }
         }
