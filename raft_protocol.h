@@ -28,7 +28,7 @@ public:
     int lastLogIndex;
     int lastLogTerm;
 
-    request_vote_args() {}
+    request_vote_args()=default;
     request_vote_args(int t, int c, int l1, int l2) : term(t), candidateId(c), lastLogIndex(l1), lastLogTerm(l2){};
 };
 
@@ -56,25 +56,22 @@ public:
     int term;
     command cmd;
 
-    log_entry(int index = 0, int term = 0) : index(index), term(term) {}
+    log_entry() : index(0), term(0) {}
+    log_entry(int index, int term) : index(index), term(term) {}
     log_entry(int index, int term, command cmd) : index(index), term(term), cmd(cmd) {}
 };
 
 template <typename command>
 marshall &operator<<(marshall &m, const log_entry<command> &entry)
 {
-    m << entry.index;
-    m << entry.term;
-    m << entry.cmd;
+    m << entry.index << entry.term << entry.cmd;
     return m;
 }
 
 template <typename command>
 unmarshall &operator>>(unmarshall &u, log_entry<command> &entry)
 {
-    u >> entry.index;
-    u >> entry.term;
-    u >> entry.cmd;
+    u >> entry.index >> entry.term >> entry.cmd;
     return u;
 }
 
@@ -96,24 +93,14 @@ public:
 template <typename command>
 marshall &operator<<(marshall &m, const append_entries_args<command> &args)
 {
-    m << args.term;
-    m << args.leaderId;
-    m << args.prevLogIndex;
-    m << args.prevLogTerm;
-    m << args.entries;
-    m << args.leaderCommit;
+    m << args.term << args.leaderId << args.prevLogIndex << args.prevLogTerm << args.entries << args.leaderCommit;
     return m;
 }
 
 template <typename command>
 unmarshall &operator>>(unmarshall &u, append_entries_args<command> &args)
 {
-    u >> args.term;
-    u >> args.leaderId;
-    u >> args.prevLogIndex;
-    u >> args.prevLogTerm;
-    u >> args.entries;
-    u >> args.leaderCommit;
+    u >> args.term >> args.leaderId >> args.prevLogIndex >> args.prevLogTerm >> args.entries >> args.leaderCommit;
     return u;
 }
 
@@ -138,7 +125,6 @@ public:
     install_snapshot_args()=default;
     install_snapshot_args(int term_, int leaderId_, int lastIncludedIndex_, int lastIncludedTerm_, std::vector<char> snapshot_)
     : term(term_), leaderId(leaderId_), lastIncludedIndex(lastIncludedIndex_), lastIncludedTerm(lastIncludedTerm_), snapshot(snapshot_){}
-
 };
 
 marshall &operator<<(marshall &m, const install_snapshot_args &args);
