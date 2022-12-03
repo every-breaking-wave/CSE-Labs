@@ -85,24 +85,19 @@ void chfs_state_machine::apply_log(raft_command &cmd) {
         }
         case chfs_command_raft::CMD_GET:{
             printf("\nchfs_state_machine: get file , id : %d\n", chfs_cmd.id);
-//            mtx.lock();
             es.get(chfs_cmd.id, chfs_cmd.res->buf);
             chfs_cmd.res->id  = chfs_cmd.id;
-//            chfs_cmd.res->buf = chfs_cmd.buf;
             chfs_cmd.res->done = chfs_cmd.res->buf.size() > 0;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
-//            mtx.unlock();
             break;
         }
 
         case chfs_command_raft::CMD_GETA:{
             printf("\nchfs_state_machine: get file attr, id : %d\n", chfs_cmd.id);
-//            mtx.lock();
             es.getattr(chfs_cmd.id, chfs_cmd.res->attr);
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
             chfs_cmd.res->done = chfs_cmd.res->attr.type > 0;
-//            mtx.unlock();
             break;
         }
 
@@ -110,23 +105,19 @@ void chfs_state_machine::apply_log(raft_command &cmd) {
             printf("\nchfs_state_machine: create file , type : %d\n", chfs_cmd.type);
             int status =  0;
             es.put(chfs_cmd.id, chfs_cmd.buf, status);
-//            mtx.lock();
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->buf = chfs_cmd.buf;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
             chfs_cmd.res->done = chfs_cmd.res->buf.size() > 0;
-//            mtx.unlock();
             break;
         }
 
         case chfs_command_raft::CMD_CRT:{
             printf("\nchfs_state_machine: create file , type : %d\n", chfs_cmd.type);
             es.create(chfs_cmd.type, chfs_cmd.id);
-//            mtx.lock();
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->done = chfs_cmd.res->id > 0;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
-//            mtx.unlock();
             break;
         }
 
@@ -134,11 +125,9 @@ void chfs_state_machine::apply_log(raft_command &cmd) {
             printf("\nchfs_state_machine: create file , type : %d\n", chfs_cmd.type);
             int status = 0;
             es.remove(chfs_cmd.id, status);
-//            mtx.lock();
             chfs_cmd.res->id  = chfs_cmd.id;
             chfs_cmd.res->done = status > 0;
             chfs_cmd.res->tp = chfs_cmd.cmd_tp;
-//            mtx.unlock();
         }
     }
 

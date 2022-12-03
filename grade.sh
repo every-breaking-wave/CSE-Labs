@@ -36,9 +36,9 @@ raft_test_case part1 leader_election 10
 raft_test_case part1 re_election 10
 raft_test_case part2 basic_agree 10
 raft_test_case part2 fail_agree 10
-raft_test_case part2 fail_no_agree 5
-raft_test_case part2 concurrent_start 5
-raft_test_case part2 rejoin 5
+raft_test_case part2 fail_no_agree 5 #
+raft_test_case part2 concurrent_start 5 #
+raft_test_case part2 rejoin 5 #
 raft_test_case part2 backup 5
 raft_test_case part2 rpc_count 5
 raft_test_case part3 persist1 5
