@@ -11,11 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_protocol.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_protocol.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_storage.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_storage.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
     </list>
@@ -106,6 +101,10 @@
       <workItem from="1669845597603" duration="7000" />
       <workItem from="1669881453329" duration="17903000" />
       <workItem from="1669946995117" duration="13851000" />
+      <workItem from="1670078617795" duration="479000" />
+      <workItem from="1670082085180" duration="282000" />
+      <workItem from="1670142790821" duration="1934000" />
+      <workItem from="1670388583404" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="[lab3] begin lab3g">
       <created>1669092090309</created>
@@ -177,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670051368745</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="[lab3] pass all">
+      <created>1670054629696</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670054629696</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,6 +209,7 @@
     <MESSAGE value="[lab3] pass part3 persisit1" />
     <MESSAGE value="[lab3] pass except part4" />
     <MESSAGE value="[lab3] pass except part3,4" />
-    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass except part3,4" />
+    <MESSAGE value="[lab3] pass all" />
+    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass all" />
   </component>
 </project>
