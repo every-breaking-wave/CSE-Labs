@@ -15,6 +15,8 @@ mkdir chfs1 >/dev/null 2>&1
 
 ./start.sh
 
+mkdir -p extfs >/dev/null 2>&1
+
 test_if_has_mount(){
 	mount | grep -q "chfs_client"
 	if [ $? -ne 0 ];
@@ -42,7 +44,7 @@ test_if_has_mount
 ##################################################
 
 wc_test(){
-./test-lab4-a.sh chfs1 | grep -q "Passed mr-wc test."
+./test-lab4-a.sh extfs | grep -q "Passed mr-wc test."
 if [ $? -ne 0 ];
 then
         echo "Failed test-a"
@@ -66,7 +68,7 @@ wc_test
 ##################################################
 
 mr_wc_test(){
-./test-lab4-b.sh chfs1 | grep -q "Passed mr-wc-distributed test."
+./test-lab4-b.sh extfs | grep -q "Passed mr-wc-distributed test."
 if [ $? -ne 0 ];
 then
         echo "Failed test-part2-b"
@@ -78,8 +80,8 @@ else
 				echo "FATAL: chfs_client DIED!"
 				exit
 		else
-			score=$((score+70))
-			echo "Passed part B (Word Count with distributed MapReduce)"
+			score=$((score+50))
+			echo "Passed part B-a (Word Count with distributed MapReduce)"
 			#echo $score
 		fi
 fi
@@ -87,6 +89,29 @@ fi
 
 mr_wc_test
 
+#################################################
+
+mr_wc_test-perf(){
+./test-lab4-b.sh chfs1 | grep -q "Passed mr-wc-distributed test."
+if [ $? -ne 0 ];
+then
+        echo "Failed test-part2-b with performance requirements"
+else
+        #exit
+		ps -e | grep -q "chfs_client"
+		if [ $? -ne 0 ];
+		then
+				echo "FATAL: chfs_client DIED!"
+				exit
+		else
+			score=$((score+20))
+			echo "Passed part B-b (Word Count with distributed MapReduce with performance requirements)"
+			#echo $score
+		fi
+fi
+}
+
+mr_wc_test-perf
 # finally reaches here!
 if [ $score -eq 100 ];
 then
@@ -97,6 +122,7 @@ else
 fi
 
 ./stop.sh >/dev/null 2>&1
+rm -rf extfs/
 
 echo ""
 echo "Score: "$score"/100"
