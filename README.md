@@ -1,6 +1,9 @@
 # Lab 4: Map Reduce on Fault-tolerant Distributed Filesystem
+
 ### Getting started
+
 Before starting this lab, please back up all of your prior labs' solutions.
+
 ```bash
 $ cd cse-lab
 $ git commit -a -m "upload lab3-sol"
@@ -27,7 +30,7 @@ $ make clean && make
 
 (Reference: MIT 6.824 Distributed Systems)
 
-In this lab, you are asked to build a MapReduce framework on top of your Distributed Filesystem implemented in Lab1-3. **Make sure that you can pass all the tests in lab3 before you get start.**
+In this lab, you are asked to build a MapReduce framework on top of your Distributed Filesystem implemented in Lab1-3. 
 
 You will implement a worker process that calls Map and Reduce functions and handles reading and writing files, and a coordinator process that hands out tasks to workers and copes with failed workers.
 
@@ -59,19 +62,21 @@ There are four files added for this part: `mr_protocol.h`, `mr_sequential.cc`, `
 - The coordinator, as an RPC server, should be concurrent; hence please don't forget to lock the shared data.
 - The Map part of your workers can use a hash function to distribute the intermediate key-values to different files intended for different Reduce tasks.
 - A reasonable naming convention for intermediate files is mr-X-Y, where X is the Map task number, and Y is the reduce task number. The worker's map task code will need a way to store intermediate key/value pairs in files in a way that can be correctly read back during reduce tasks.
-- Intermediate files will be operated on your distributed file system implemented in lab 3. If the file system's performance is bad, it *shall not pass the test* !
+- Intermediate files will be operated on the Linux file system (part A, part B-a) or your distributed file system implemented in lab 1-3 (part B-b). If the file system's performance or your MapReduce implementation's performance is bad, it *shall not pass the test* !
 
 ### Grading
+
 Before grading, we will first check your lab3 implementation using the grade script in lab3.
-If lab3's tests fail, you can only get half of the score of lab4.
+If lab3's tests fail, you can not pass *part B-b*.
 
 After you have implement part1 & part2, run the grading script:
 
-```
-% ./grade.sh
-
+```bash
+$ ./grade.sh
+# ...
 Passed part A (Word Count)
-Passed part B (Word Count with distributed MapReduce)
+Passed part B-a (Word Count with distributed MapReduce)
+Passed part B-b (Word Count with distributed MapReduce with performance requirements)
 Lab4 passed
 
 Passed all tests!
