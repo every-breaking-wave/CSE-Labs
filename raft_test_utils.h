@@ -37,6 +37,8 @@
           #part, #name, new test_case_##part##_##name##_ut(msg));              \
   void test_case_##part##_##name##_ut::body()
 
+#define DEBUG
+
 class unit_test_case {
 public:
   virtual void body() = 0;
@@ -169,7 +171,7 @@ public:
 template <typename state_machine, typename command>
 raft_group<state_machine, command>::raft_group(int num,
                                                const char *storage_dir) {
-    // printf("raft_group created begin\n");
+     printf("raft_group created begin\n");
     nodes.resize(num, nullptr);
     servers = create_random_rpc_servers(num);
     clients.resize(num);
@@ -332,6 +334,7 @@ int raft_group<state_machine, command>::num_committed(int log_idx) {
 
 template <typename state_machine, typename command>
 int raft_group<state_machine, command>::get_committed_value(int log_idx) {
+//    printf("get committed value by log idx %d\n", log_idx);
   for (size_t i = 0; i < nodes.size(); i++) {
     list_state_machine *state = states[i];
     int log_value;
@@ -339,7 +342,7 @@ int raft_group<state_machine, command>::get_committed_value(int log_idx) {
       std::unique_lock<std::mutex> lock(state->mtx);
       if ((int)state->store.size() > log_idx) {
         log_value = state->store[log_idx];
-        return log_value;
+          return log_value;
       }
     }
   }
@@ -373,12 +376,13 @@ int raft_group<state_machine, command>::append_new_command(
       while (std::chrono::system_clock::now() <
              check_start + std::chrono::seconds(2)) {
         int committed_server = num_committed(log_idx);
-        // std::cout << "nun commited: " << committed_server << std::endl;
+//         std::cout << "nun commited: " << committed_server << std::endl;
         if (committed_server >= expected_servers) {
           // The log is committed!
           int commited_value = get_committed_value(log_idx);
-          if (commited_value == value)
-            return log_idx; // and the log is what we want!
+          if (commited_value == value){
+              return log_idx; // and the log is what we want!
+          }
         }
         mssleep(20);
       }

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="5d5b31cf-6098-4f5f-bca8-c1cb425d2310" />
+        <option name="url" value="git@github.com:every-breaking-wave/CSE-Labs.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MakefileLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Ht67Guzu3yYBMk1RIzdHhwg73G" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="%.o" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/GNUmakefile" target="%.o" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile Target.%.o" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="" />
+      <created>1669091864377</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1669091864377</updated>
+      <workItem from="1669091866867" duration="501000" />
+      <workItem from="1669095175384" duration="157000" />
+      <workItem from="1669095350235" duration="471000" />
+      <workItem from="1669096598328" duration="14000" />
+      <workItem from="1669097211395" duration="19382000" />
+      <workItem from="1669122705509" duration="5939000" />
+      <workItem from="1669132957600" duration="12700000" />
+      <workItem from="1669167495764" duration="1730000" />
+      <workItem from="1669296372715" duration="24235000" />
+      <workItem from="1669373203884" duration="823000" />
+      <workItem from="1669374488709" duration="19492000" />
+      <workItem from="1669431515763" duration="1000" />
+      <workItem from="1669432224767" duration="22194000" />
+      <workItem from="1669455162683" duration="8593000" />
+      <workItem from="1669557793843" duration="816000" />
+      <workItem from="1669770233894" duration="216000" />
+      <workItem from="1669845597603" duration="7000" />
+      <workItem from="1669881453329" duration="17903000" />
+      <workItem from="1669946995117" duration="13851000" />
+      <workItem from="1670078617795" duration="479000" />
+      <workItem from="1670082085180" duration="282000" />
+      <workItem from="1670142790821" duration="1934000" />
+      <workItem from="1670388583404" duration="1000" />
+    </task>
+    <task id="LOCAL-00001" summary="[lab3] begin lab3g">
+      <created>1669092090309</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669092090309</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[lab3] begin lab3g">
+      <created>1669095452260</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669095452260</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[lab3] begin lab3g">
+      <created>1669095571853</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669095571853</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[lab3] pass part1">
+      <created>1669297782206</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1669297782206</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[lab3] update part1">
+      <created>1669400172566</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1669400172566</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[lab3] pass part2-1">
+      <created>1669442327314</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1669442327314</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[lab3] pass part2">
+      <created>1669448867730</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1669448867730</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[lab3] pass part3 persisit1">
+      <created>1669899328763</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1669899328763</updated>
+    </task>
+    <task id="LOCAL-00009" summary="[lab3] pass except part4">
+      <created>1670033574920</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670033574920</updated>
+    </task>
+    <task id="LOCAL-00010" summary="[lab3] pass except part3,4">
+      <created>1670051368745</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1670051368745</updated>
+    </task>
+    <task id="LOCAL-00011" summary="[lab3] pass all">
+      <created>1670054629696</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670054629696</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[lab3] begin lab3g" />
+    <MESSAGE value="[lab3] pass part1" />
+    <MESSAGE value="[lab3] update part1" />
+    <MESSAGE value="[lab3] pass part2-1" />
+    <MESSAGE value="[lab3] pass part2" />
+    <MESSAGE value="[lab3] pass part3 persisit1" />
+    <MESSAGE value="[lab3] pass except part4" />
+    <MESSAGE value="[lab3] pass except part3,4" />
+    <MESSAGE value="[lab3] pass all" />
+    <option name="LAST_COMMIT_MESSAGE" value="[lab3] pass all" />
+  </component>
+</project>

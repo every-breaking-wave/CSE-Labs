@@ -1,6 +1,7 @@
 #include "raft_state_machine.h"
 #include "rpc.h"
 #include "extent_server.h"
+#include <assert.h>
 
 class chfs_command_raft : public raft_command {
 public:
@@ -23,6 +24,14 @@ public:
         bool done;
         std::mutex mtx;             // protect the struct
         std::condition_variable cv; // notify the caller
+
+        void set_attr(uint32_t type, uint32_t size, time_t ct, time_t at, time_t mt){
+            attr.mtime = mt;
+            attr.ctime = ct;
+            attr.atime = at;
+            attr.type = type;
+            attr.size = size;
+        }
     };
     // Lab3: your code here
     // You may add your own member variables if you need
@@ -71,4 +80,5 @@ private:
     std::mutex mtx;
     // Lab3: Your code here
     // You can add your own variables and functions here if you want.
+
 };
