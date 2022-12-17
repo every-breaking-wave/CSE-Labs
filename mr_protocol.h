@@ -27,10 +27,22 @@ public:
 
 	struct AskTaskResponse {
 		// Lab4: Your definition here.
+        int tasktype;
+        int index;
+        int nfiles;
+        string filename;
 	};
+
+    friend unmarshall &operator>>(unmarshall &u, AskTaskResponse &res){
+        return u >> res.tasktype >> res.filename >> res.index >> res.nfiles;
+    }
+    friend marshall &operator<<(marshall &m, const AskTaskResponse &res){
+        return m << res.tasktype << res.filename << res.index << res.nfiles;
+    }
 
 	struct AskTaskRequest {
 		// Lab4: Your definition here.
+        int index;
 	};
 
 	struct SubmitTaskResponse {

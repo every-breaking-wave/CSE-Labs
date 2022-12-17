@@ -3,16 +3,70 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated />
+  </component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="">
+    <list default="true" id="60a58121-da4b-41b0-93bd-fd3f9dade32a" name="Changes" comment="[lab3] pass all">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GNUmakefile" beforeDir="false" afterPath="$PROJECT_DIR$/GNUmakefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_client.h" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_client.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.cc" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chfs_state_machine.h" beforeDir="false" afterPath="$PROJECT_DIR$/chfs_state_machine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_client.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_client.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/extent_protocol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist.cc" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extent_server_dist.h" beforeDir="false" afterPath="$PROJECT_DIR$/extent_server_dist.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fuse.cc" beforeDir="false" afterPath="$PROJECT_DIR$/fuse.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gettime.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gettime.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inode_manager.cc" beforeDir="false" afterPath="$PROJECT_DIR$/inode_manager.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inode_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/inode_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mr_coordinator.cc" beforeDir="false" afterPath="$PROJECT_DIR$/mr_coordinator.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mr_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/mr_protocol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mr_sequential.cc" beforeDir="false" afterPath="$PROJECT_DIR$/mr_sequential.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mr_worker.cc" beforeDir="false" afterPath="$PROJECT_DIR$/mr_worker.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/being_ernest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/novels/being_ernest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/dorian_gray.txt" beforeDir="false" afterPath="$PROJECT_DIR$/novels/dorian_gray.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/frankenstein.txt" beforeDir="false" afterPath="$PROJECT_DIR$/novels/frankenstein.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/metamorphosis.txt" beforeDir="false" afterPath="$PROJECT_DIR$/novels/metamorphosis.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/mr-wc-correct" beforeDir="false" afterPath="$PROJECT_DIR$/novels/mr-wc-correct" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/sherlock_holmes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/novels/sherlock_holmes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novels/tom_sawyer.txt" beforeDir="false" afterPath="$PROJECT_DIR$/novels/tom_sawyer.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1_tester.cc" beforeDir="false" afterPath="$PROJECT_DIR$/part1_tester.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_protocol.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_protocol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_storage.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_storage.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raft_test.o" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.cc" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.d" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft_test_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/raft_test_utils.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/connection.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/connection.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/jsl_log.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/jsl_log.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/librpc.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/pollmgr.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/rpc.d" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/rpc.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/thr_pool.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/thr_pool.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab3-part5-b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab4-a.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab4-a.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-lab4-b.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test-lab4-b.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +75,9 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="lab3" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -32,6 +89,15 @@
         <option name="url" value="git@github.com:every-breaking-wave/CSE-Labs.git" />
       </UrlAndAccount>
     </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/chfs_state_machine.cc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extent_client.cc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extent_sdist_main.cc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extent_server.cc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extent_server_dist.cc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/raft.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/raft_storage.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MakefileLocalSettings">
     <option name="projectSyncType">
@@ -105,6 +171,7 @@
       <workItem from="1670082085180" duration="282000" />
       <workItem from="1670142790821" duration="1934000" />
       <workItem from="1670388583404" duration="1000" />
+      <workItem from="1671240847016" duration="22346000" />
     </task>
     <task id="LOCAL-00001" summary="[lab3] begin lab3g">
       <created>1669092090309</created>
@@ -194,7 +261,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/lab4" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

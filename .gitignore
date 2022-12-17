@@ -6,3 +6,4 @@ log/
 *.log
 .clang-format
 raft_temp/
+/.idea/workspace.xml

@@ -8,7 +8,7 @@
 DIR=$1
 
 cp ./novels/*.txt $DIR
-
+echo $1
 # generate the wc output
 ./mr_sequential $DIR/*.txt > $DIR/mr-out-0 || exit
 sort $DIR/mr-out-0 > $DIR/mr-wc
@@ -25,3 +25,4 @@ then
 else
 	exit
 fi
+y6

@@ -8,12 +8,17 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
 
-typedef struct {
+typedef struct KeyVal{
     string key;
     string val;
+    KeyVal(string key_, string val_){
+        key = key_;
+        val = val_;
+    }
 }
 KeyVal;
 
@@ -24,10 +29,38 @@ KeyVal;
 // and look only at the contents argument. The return value is a slice
 // of key/value pairs.
 //
+
+
+
 vector<KeyVal> Map(const string &filename, const string &content)
 {
     // Your code goes here
     // Hints: split contents into an array of words.
+    vector<KeyVal> word_to_count;
+    int begin = 0, end = 0;
+    string str = "";
+    while (content[end] != '\0'){
+        if(isalpha(content[end])){
+            end++;
+        } else if(end > begin){
+            str = content.substr(begin, end - begin);
+            word_to_count.emplace_back(KeyVal(str, "1"));
+            end ++;
+            begin = end;
+        } else{    // illegal character or space, skip it
+            while (!isalpha(content[end]) && content[end] != '\0'){
+                end++;
+            }
+            begin = end;
+        }
+    }
+    // last string
+    if(end > begin){
+        str = content.substr(begin, end - begin);
+        word_to_count.emplace_back(KeyVal(str, "1"));
+    }
+
+    return word_to_count;
 
 }
 
@@ -40,7 +73,11 @@ string Reduce(const string &key, const vector <string> &values)
 {
     // Your code goes here
     // Hints: return the number of occurrences of the word.
-
+    int count = 0;
+    for(auto value : values){
+        count += stol(value);
+    }
+    return to_string(count);
 }
 
 int main(int argc, char ** argv)
@@ -68,7 +105,6 @@ int main(int argc, char ** argv)
         getline(ifstream(filename), content, '\0');
 
         vector <KeyVal> KVA = Map(filename, content);
-
         intermediate.insert(intermediate.end(), KVA.begin(), KVA.end());
 
     }
@@ -81,14 +117,14 @@ int main(int argc, char ** argv)
 
     sort(intermediate.begin(), intermediate.end(),
     	[](KeyVal const & a, KeyVal const & b) {
-		return a.key < b.key;
+            return  a.key.compare(b.key) < 0;
 	});
 
     //
     // call Reduce on each distinct key in intermediate[],
     // and print the result to mr-out-0.
     //
-
+//    printf("size %d\n", intermediate.size());
     for (unsigned int i = 0; i < intermediate.size();) {
         unsigned int j = i + 1;
         for (; j < intermediate.size() && intermediate[j].key == intermediate[i].key;)
